@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PWD BUPCA Inc. — Strategic Overview & Impact Deck</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Newsreader:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap');
+
+    :root {
+      --primary: #1d4ed8;
+      --primary-dark: #1e3a8a;
+      --primary-light: #dbeafe;
+      --accent-gold: #d97706;
+      --accent-gold-light: #fef3c7;
+      --success: #059669;
+      --success-light: #ecfdf5;
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --text-light: #64748b;
+      --bg-light: #f8fafc;
+      --border-subtle: #e2e8f0;
+      --border-medium: #cbd5e1;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      color: var(--text-main);
+      background-color: #ffffff;
+      line-height: 1.6;
+      font-size: 13.5px;
+      padding: 40px;
+    }
+
+    .container {
+      max-width: 880px;
+      margin: 0 auto;
+    }
+
+    /* Print Specific Rules */
+    @page {
+      size: A4;
+      margin: 18mm 16mm;
+    }
+
+    @media print {
+      body {
+        padding: 0;
+        font-size: 12.5px;
+      }
+      .no-print {
+        display: none !important;
+      }
+      .page-break {
+        page-break-before: always;
+      }
+      .page-break-inside-avoid {
+        page-break-inside: avoid;
+      }
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+    }
+
+    /* Print Toolbar */
+    .print-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 12px;
+      padding: 14px 20px;
+      margin-bottom: 30px;
+    }
+
+    .print-btn {
+      background: var(--primary);
+      color: #ffffff;
+      border: none;
+      padding: 9px 18px;
+      font-size: 13px;
+      font-weight: 700;
+      border-radius: 8px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .print-btn:hover {
+      background: var(--primary-dark);
+    }
+
+    /* Header Banner */
+    header {
+      border-bottom: 2px solid var(--border-subtle);
+      padding-bottom: 24px;
+      margin-bottom: 28px;
+    }
+
+    .badge-prestige {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--accent-gold-light);
+      color: #92400e;
+      border: 1px solid #fde68a;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 20px;
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--primary-dark);
+      line-height: 1.25;
+      margin-bottom: 6px;
+    }
+
+    .sub-tagline {
+      font-family: 'Newsreader', serif;
+      font-size: 16px;
+      font-style: italic;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+
+    .meta-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .pill {
+      background: var(--bg-light);
+      border: 1px solid var(--border-subtle);
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      padding: 3px 9px;
+      border-radius: 6px;
+    }
+
+    /* Content Typography */
+    h2 {
+      font-size: 17px;
+      font-weight: 800;
+      color: #0f172a;
+      border-bottom: 1.5px solid var(--primary);
+      padding-bottom: 5px;
+      margin-top: 26px;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    h3 {
+      font-size: 14.5px;
+      font-weight: 700;
+      color: var(--primary-dark);
+      margin-top: 16px;
+      margin-bottom: 6px;
+    }
+
+    p {
+      margin-bottom: 12px;
+      color: #334155;
+      text-align: justify;
+    }
+
+    /* Highlight Summary Cards */
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin: 18px 0;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin: 18px 0;
+    }
+
+    .stat-card {
+      background: var(--bg-light);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      padding: 14px;
+      text-align: center;
+    }
+
+    .stat-card .val {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: 2px;
+    }
+
+    .stat-card .lbl {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .stat-card .sub {
+      font-size: 10px;
+      color: var(--text-light);
+      margin-top: 2px;
+    }
+
+    /* Pillars */
+    .pillar-card {
+      background: #ffffff;
+      border: 1px solid var(--border-subtle);
+      border-left: 4px solid var(--primary);
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+    }
+
+    .pillar-card.gold {
+      border-left-color: var(--accent-gold);
+    }
+
+    .pillar-card.green {
+      border-left-color: var(--success);
+    }
+
+    .pillar-card h4 {
+      font-size: 13.5px;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+
+    ul {
+      margin-left: 18px;
+      margin-bottom: 12px;
+    }
+
+    li {
+      margin-bottom: 4px;
+      color: #334155;
+    }
+
+    /* Modern Clean Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: 12px;
+    }
+
+    th {
+      background: #f1f5f9;
+      color: #1e293b;
+      font-weight: 700;
+      text-align: left;
+      padding: 8px 12px;
+      border: 1px solid var(--border-subtle);
+    }
+
+    td {
+      padding: 8px 12px;
+      border: 1px solid var(--border-subtle);
+      color: #334155;
+      vertical-align: top;
+    }
+
+    tr:nth-child(even) td {
+      background: #fafafa;
+    }
+
+    .num-col {
+      text-align: right;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 600;
+    }
+
+    /* Formula Banner */
+    .formula-box {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+      margin: 12px 0;
+      color: #0f172a;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border-subtle);
+      padding-top: 16px;
+      margin-top: 36px;
+      font-size: 10.5px;
+      color: var(--text-light);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    
+    <!-- Print toolbar -->
+    <div class="print-toolbar no-print">
+      <div>
+        <strong style="color: #1e3a8a;">Ready to Export to PDF</strong>
+        <p style="font-size: 12px; color: #475569; margin-top: 2px;">Click the button or press <code>Ctrl+P</code> / <code>Cmd+P</code> to save this document as a clean, high-resolution PDF.</p>
+      </div>
+      <button class="print-btn" onclick="window.print()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+        <span>Export as PDF</span>
+      </button>
+    </div>
+
+    <!-- Header Section -->
+    <header>
+      <div class="badge-prestige">
+        ★ UP Gawad Tsanselor 2025: Natatanging Samahang Pangkomunidad
+      </div>
+      <h1>PWD BUPCA Inc. — Strategic Platform & Impact Overview</h1>
+      <div class="sub-tagline">
+        "Transforming Textile Off-Cuts into Inclusive, Dignified Livelihoods & Circular Empowerment"
+      </div>
+      <div class="meta-pills">
+        <span class="pill">Persons with Disabilities - Barangay UP Campus Association</span>
+        <span class="pill">UP Diliman, Quezon City</span>
+        <span class="pill">Social Enterprise & Assistive Technology</span>
+        <span class="pill">Official Pitch Deck FY 2026</span>
+      </div>
+    </header>
+
+    <!-- Executive Summary -->
+    <section>
+      <h2>1. Executive Summary & Mission</h2>
+      <p>
+        <strong>PWD BUPCA Inc.</strong> is a grassroots community association of <em>Persons with Determination</em> in Barangay UP Campus, Diliman. The organization exists to fundamentally alter societal perceptions of persons with disabilities—transitioning members <strong>from dependency into skilled master craftspeople, innovators of ecological circularity, and economic leaders</strong>.
+      </p>
+      <p>
+        Through accredited partnerships with the <strong>UP College of Home Economics (UP CHE)</strong> and the <strong>UP College of Fine Arts</strong>, PWD BUPCA combines industrial high-speed sewing, differential overlock edging, and zero-waste fabric tessellation with a purpose-built accessible command center that manages asset tracking, daily time records (DTR), piece-rate labor accounting, and virtual store commerce.
+      </p>
+
+      <!-- Impact Stats Grid -->
+      <div class="grid-4 page-break-inside-avoid">
+        <div class="stat-card">
+          <div class="val">100%</div>
+          <div class="lbl">PWD Artisan Made</div>
+          <div class="sub">By members with determination</div>
+        </div>
+        <div class="stat-card">
+          <div class="val">2.4+ Tons</div>
+          <div class="lbl">Textile Diverted</div>
+          <div class="sub">Post-consumer denim & uniform scrap</div>
+        </div>
+        <div class="stat-card">
+          <div class="val">3 Hubs</div>
+          <div class="lbl">Workshop Hubs</div>
+          <div class="sub">Active nodes across UP Diliman</div>
+        </div>
+        <div class="stat-card">
+          <div class="val">₱0.00</div>
+          <div class="lbl">Artisan Deductions</div>
+          <div class="sub">100% grant-funded raw materials</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Target Audience Pillars -->
+    <section class="page-break-inside-avoid">
+      <h2>2. Three Stakeholder Impact Pillars</h2>
+      
+      <div class="pillar-card">
+        <h4 style="color: var(--primary);">A. For Sponsors, Donors & Institutional Allies (CSR & ESG)</h4>
+        <ul>
+          <li><strong>Auditable ESG & Social Metrics:</strong> Verified circular impact reports tracking metric tons of post-consumer textiles rescued from landfills and converted into commercial goods.</li>
+          <li><strong>Institutional Bulk Manufacturing:</strong> High-capacity production pipeline tailored for university conferences, bank merchandise, and corporate gift bags with complete artisan provenance certificates.</li>
+          <li><strong>Direct Seed Funding Allocation:</strong> 100% of material subsidies, machine maintenance, and training stipends are auditable under cooperative accounting governance.</li>
+        </ul>
+      </div>
+
+      <div class="pillar-card green">
+        <h4 style="color: var(--success);">B. For Conscious Consumers & The General Public</h4>
+        <ul>
+          <li><strong>Heirloom Quality Craftsmanship:</strong> Handcrafted utility goods engineered with heavy-duty denim offcuts, brass zippers, and reinforced double-stitching.</li>
+          <li><strong>Direct Community Reinvestment:</strong> 100% of retail sales directly finance member wages, operational allowances, and community emergency healthcare funds.</li>
+          <li><strong>Frictionless Accessible Ordering:</strong> Online catalog supporting GCash, BPI UP Campus bank transfer, and direct on-campus cash pickup at Pook Dagohoy.</li>
+        </ul>
+      </div>
+
+      <div class="pillar-card gold">
+        <h4 style="color: #b45309;">C. For the PWD Community (Artisans & Members)</h4>
+        <ul>
+          <li><strong>Adaptive Barrier-Free Workstations:</strong> Specially adapted sewing and cutting machinery accommodating wheelchair users, deaf-mute artisans, and low-vision sewers.</li>
+          <li><strong>Dual Income Security:</strong> Guaranteed <strong>DTR Hourly Allowance (₱85/hr)</strong> plus <strong>Itemized Piece-Rate Earnings</strong> for every single unit completed.</li>
+          <li><strong>Empowerment Through Tech:</strong> Multi-modal accessibility tools (high contrast, dyslexia font, audio chimes, voice guidance) allowing independent shift logging.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Product Catalog & Piece Rates -->
+    <section class="page-break">
+      <h2>3. Artisan Product Catalog & Piece-Rate Schedule</h2>
+      <p>
+        Every product has an established labor piece-rate reflecting construction complexity, machine time, and artisan skill level.
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Product Collection</th>
+            <th>Sustainable Materials Used</th>
+            <th class="num-col">Retail (₱)</th>
+            <th class="num-col">Artisan Rate</th>
+            <th>Artisan Team & Station</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>BUPCA Signature Denim Tote Bag</strong></td>
+            <td>Repurposed denim remnants, canvas base, cotton webbing</td>
+            <td class="num-col">₱380.00</td>
+            <td class="num-col" style="color: var(--success); font-weight: 700;">₱75 / unit</td>
+            <td>Elena Santos & Nanay Linda (UP CHE Workshop)</td>
+          </tr>
+          <tr>
+            <td><strong>Foldable Fabric Bread Basket</strong></td>
+            <td>Repurposed floral textile trimmings, reinforced interlining</td>
+            <td class="num-col">₱250.00</td>
+            <td class="num-col" style="color: var(--success); font-weight: 700;">₱55 / unit</td>
+            <td>Ramil Bautista (Area 2 Community Center)</td>
+          </tr>
+          <tr>
+            <td><strong>Compact Denim Utility Pouch</strong></td>
+            <td>Heavy scrap denim, #5 brass zipper, waterproof liner</td>
+            <td class="num-col">₱195.00</td>
+            <td class="num-col" style="color: var(--success); font-weight: 700;">₱45 / unit</td>
+            <td>Carla De Leon (High-Contrast Zero-Waste Station)</td>
+          </tr>
+          <tr>
+            <td><strong>Community Patchwork Canvas Apron</strong></td>
+            <td>Heavyweight twill offcuts, multi-tool utility pockets</td>
+            <td class="num-col">₱420.00</td>
+            <td class="num-col" style="color: var(--success); font-weight: 700;">₱85 / unit</td>
+            <td>PWD BUPCA Sewing Circle (Apprentice Team)</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="formula-box">
+        <strong>Mathematical Auto-Computation Formula:</strong><br>
+        Gross Pay = (Monitored DTR Hours × ₱85/hr) + Σ (Units Produced × Piece Rate) + Bonuses<br>
+        Net Take-Home = Gross Pay (0% Deduction — 100% Grant Subsidized Materials)
+      </div>
+    </section>
+
+    <!-- Technology & Operations Architecture -->
+    <section>
+      <h2>4. Technology & Command Center Architecture</h2>
+      <div class="grid-3 page-break-inside-avoid">
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px;">
+          <strong style="color: var(--primary); font-size: 13px; display: block; margin-bottom: 4px;">1. GIS Interactive Map</strong>
+          <p style="font-size: 11.5px; margin: 0;">OpenStreetMap & Leaflet tracking machinery across UP CHE Workshop, Area 2, and Main Hub with real-time relocation history.</p>
+        </div>
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px;">
+          <strong style="color: var(--primary); font-size: 13px; display: block; margin-bottom: 4px;">2. Station DTR Terminal</strong>
+          <p style="font-size: 11.5px; margin: 0;">Touch-friendly clock-in logging operator identity, equipment used, fabric meters consumed, and output units.</p>
+        </div>
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px;">
+          <strong style="color: var(--primary); font-size: 13px; display: block; margin-bottom: 4px;">3. No-Code CMS & Store</strong>
+          <p style="font-size: 11.5px; margin: 0;">Full CRUD management over vocational curricula, public headlines, impact metrics, and retail store catalog.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sponsorship Packages -->
+    <section class="page-break-inside-avoid">
+      <h2>5. Partnership & Sponsorship Tiers</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Tier Level</th>
+            <th>Commitment</th>
+            <th>Deliverables & Recognition</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Tier 1: Fabric & Waste Donor</strong></td>
+            <td>Surplus denim offcuts, uniform excess, or fabric remnants</td>
+            <td>Zero-waste carbon diversion certificate, CSR sustainability impact audit, donor logo on website.</td>
+          </tr>
+          <tr>
+            <td><strong>Tier 2: Machinery & Skills Sponsor</strong></td>
+            <td>₱25,000 – ₱50,000 Equipment grant or training cohort sponsorship</td>
+            <td>Naming rights at an adapted machine station, sponsorship plaque at UP CHE, co-branded vocational certifications.</td>
+          </tr>
+          <tr>
+            <td><strong>Tier 3: Institutional Bulk Purchaser</strong></td>
+            <td>100+ Custom conference bags, tote bundles, or corporate gift kits</td>
+            <td>Custom silkscreen/patch branding, artisan impact tags on every unit, priority scheduled fulfillment.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Contact Footer -->
+    <footer>
+      <div>
+        <strong>Persons with Disabilities - Barangay UP Campus Association Inc. (PWD BUPCA Inc.)</strong><br>
+        Community Center, Pook Dagohoy, Brgy. UP Campus, Diliman, Quezon City • Contact: Pres. Marilyn Morales / Ate Gloria Mendoza
+      </div>
+      <div style="text-align: right;">
+        Platform: Next.js 16 • Tailwind CSS v4 • Supabase<br>
+        Gawad Tsanselor 2025 Awardee
+      </div>
+    </footer>
+
+  </div>
+
+</body>
+</html>

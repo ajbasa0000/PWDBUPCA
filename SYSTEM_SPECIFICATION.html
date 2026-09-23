@@ -1,0 +1,290 @@
+<h1>System Architecture &amp; Technical Specification: PWD BUPCA Inc. Platform</h1>
+<p><strong>Client:</strong> PWD BUPCA Inc. (Persons with Disabilities - Barangay UP Campus Association)<br><strong>Advocacy Context:</strong> Community empowerment, livelihood programs (upcycled eco-bags, textile crafts, high-speed industrial machine production), UP Gawad Tsanselor Natatanging Lingkod Komunidad awardee.<br><strong>Tech Stack:</strong> Next.js 16 (App Router, TypeScript), Tailwind CSS v4, Plus Jakarta Sans &amp; Newsreader typography, Leaflet / OpenStreetMap, Radix UI &amp; Lucide React, Supabase (PostgreSQL + PostGIS + Realtime + Auth + Storage), Vercel.</p>
+<hr>
+<h2>1. Executive Summary &amp; Core Objectives</h2>
+<p>The platform provides a dual-facing solution built with an <strong>accessibility-first</strong> and <strong>clean editorial design</strong>:</p>
+<ol>
+<li><strong>Public Web Portal &amp; Mini Virtual Store:</strong><ul>
+<li>Highlights PWD BUPCA’s advocacy for <strong>&quot;Persons with Determination&quot;</strong>, Gawad Tsanselor recognition, UP College of Home Economics (UP CHE) partnerships, and member testimonials.</li>
+<li>Showcases authentic sustainable handcrafted goods (upcycled denim totes, storage baskets, pouches, and work aprons).</li>
+<li>Features an accessible shopping cart and 2-step checkout supporting GCash, BPI UP Campus bank transfer, and Cash on Pickup.</li>
+</ul>
+</li>
+<li><strong>Accessible Main Command Center (Admin, Staff &amp; Superuser):</strong><ul>
+<li><strong>Modern Sidebar Architecture:</strong> Clean, user-friendly sidebar navigation categorizing Operations, Publishing CMS, and Developer Tools.</li>
+<li><strong>Asset Operations Monitor &amp; Stationary Interactive Map (2a):</strong> OpenStreetMap/Leaflet integration pinpointing UP Diliman workshops (<em>UP CHE Workshop</em>, <em>Area 2 Community Center</em>, <em>BUPCA Hub</em>), live machine operational status, relocation tracker, and Asset-Linked DTR check-in.</li>
+<li><strong>Supplies Basic Ordering System (2b):</strong> Catalog of 100% organization-subsidized raw materials (denim scraps, heavy thread, zippers, woven labels) with member allocation requests and admin approval queue.</li>
+<li><strong>Shopping Command Center (2c):</strong> Live customer order pipeline (<code>pending</code> $\rightarrow$ <code>in_production</code> $\rightarrow$ <code>ready_for_pickup</code> $\rightarrow$ <code>completed</code>) with customer contact details and gross revenue metrics.</li>
+<li><strong>Accounting &amp; Labor Payroll (2d):</strong> Transparent compensation engine calculating net payouts from station DTR units and supervised hours, complete with printable official artisan pay statements.</li>
+<li><strong>Website Content Manager (CMS):</strong> Customization suite allowing non-technical staff to update landing page headlines, mission/vision statements, public impact statistics, and partner banners without touching code.</li>
+<li><strong>Developer &amp; Master Database Module:</strong> Master CRUD interface for configuring raw records across machinery, member/user profiles (with disability classifications), store catalog items, and raw inventory supplies.</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2>2. Design System &amp; Accessibility Engineering (WCAG 2.1 AA/AAA)</h2>
+<ol>
+<li><strong>Light &amp; Dark Theme Switcher:</strong><ul>
+<li>Dedicated Sun/Moon toggle button in the top navigation and sidebar.</li>
+<li>Configured with Tailwind CSS v4 <code>@custom-variant dark</code> and inline theme initialization script to prevent page flicker.</li>
+<li>Persisted in browser <code>localStorage</code>.</li>
+</ul>
+</li>
+<li><strong>Approachable Human Typography:</strong><ul>
+<li><strong>Primary Interface:</strong> <a href="https://fonts.google.com/specimen/Plus+Jakarta+Sans">Plus Jakarta Sans</a> (warm, clear, human-designed geometric grotesque).</li>
+<li><strong>Storytelling Editorial Serif:</strong> <a href="https://fonts.google.com/specimen/Newsreader">Newsreader</a> (used for narrative emphasis and artisan testimonials).</li>
+</ul>
+</li>
+<li><strong>Floating Accessibility Control Center (<code>AccessibilityToolbar.tsx</code>):</strong><ul>
+<li><strong>High Contrast Themes:</strong> Standard mode, High-Contrast Black &amp; Yellow (low vision / macular degeneration standard), and Pure Dark.</li>
+<li><strong>Text Size Scaling:</strong> 100%, 125%, and 150% dynamic zoom without layout breaking.</li>
+<li><strong>Dyslexia Font Mode:</strong> Expanded kerning and distinct letter distinction.</li>
+<li><strong>Audio Cues &amp; Voice Feedback:</strong> Web Audio oscillator chimes on DTR logs, checkout, and CRUD actions, plus Text-to-Speech vocal briefings.</li>
+<li><strong>Keyboard First:</strong> High-contrast <code>focus-visible</code> indicators and an explicit <code>#main-content</code> skip link.</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2>3. Database Entity Relationship (Supabase / PostgreSQL)</h2>
+<pre><code class="language-mermaid">erDiagram
+    PROFILES ||--o{ ASSET_LOGS : &quot;logs DTR&quot;
+    PROFILES ||--o{ SUPPLY_REQUESTS : &quot;requests&quot;
+    PROFILES ||--o{ PAYROLL_RECORDS : &quot;earns&quot;
+    
+    ASSETS ||--o{ ASSET_LOGS : &quot;operated at&quot;
+    ASSETS }|--|| LOCATIONS : &quot;currently stationed at&quot;
+    
+    SUPPLIES ||--o{ SUPPLY_REQUESTS : &quot;itemized in&quot;
+    
+    PRODUCTS ||--o{ ORDER_ITEMS : &quot;contains&quot;
+    ORDERS ||--o{ ORDER_ITEMS : &quot;has&quot;
+    PROFILES ||--o{ ORDERS : &quot;managed by&quot;
+    
+    PROFILES {
+        uuid id PK
+        string full_name
+        string disability &quot;Visual | Hearing | Physical/Motor | Speech | Cognitive | None&quot;
+        string role &quot;superuser | admin | member_operator | customer&quot;
+        string phone
+        boolean active_status
+    }
+
+    LOCATIONS {
+        uuid id PK
+        string name &quot;UP CHE Workshop, Area 2 Center, PWD BUPCA Hub&quot;
+        decimal latitude
+        decimal longitude
+        text address
+        string contact_person
+    }
+
+    ASSETS {
+        uuid id PK
+        string asset_tag &quot;BUPCA-SEW-01, BUPCA-EDGE-01&quot;
+        string name &quot;Juki High-Speed Lockstitch #1&quot;
+        string category &quot;High-Speed Sewing Machine | Edging Machine | Cutting Table&quot;
+        uuid location_id FK
+        string status &quot;online | idle | maintenance | offline&quot;
+        text specifications
+    }
+
+    ASSET_LOGS {
+        uuid id PK
+        uuid member_id FK
+        uuid asset_id FK
+        timestamp clock_in
+        timestamp clock_out
+        decimal duration_hours
+        jsonb materials_consumed &quot;e.g. { &#39;denim_meters&#39;: 3.0 }&quot;
+        integer units_produced &quot;e.g. 12 eco-totes&quot;
+        text remarks
+    }
+
+    SUPPLIES {
+        uuid id PK
+        string name &quot;Upcycled Denim Scraps, Heavy Duty Thread&quot;
+        string unit &quot;meters, spools, pieces&quot;
+        integer current_stock
+        integer min_threshold
+        boolean is_subsidized
+    }
+
+    SUPPLY_REQUESTS {
+        uuid id PK
+        uuid member_id FK
+        uuid supply_id FK
+        integer quantity_requested
+        string purpose
+        string status &quot;pending | approved | fulfilled | rejected&quot;
+        date request_date
+    }
+
+    PRODUCTS {
+        uuid id PK
+        string name &quot;Signature Denim Eco-Tote&quot;
+        text description
+        decimal price
+        integer stock
+        string image_url
+        string artisan_name
+        string materials_used
+    }
+
+    ORDERS {
+        uuid id PK
+        string order_number &quot;BUPCA-2026-089&quot;
+        string customer_name
+        string customer_phone
+        text delivery_address
+        decimal total_amount
+        string status &quot;pending | in_production | ready_for_pickup | completed&quot;
+        string payment_method &quot;GCash | Bank Transfer | Cash on Pickup&quot;
+    }
+
+    PAYROLL_RECORDS {
+        uuid id PK
+        uuid member_id FK
+        string pay_period
+        decimal hours_worked
+        decimal hourly_allowance
+        integer units_produced
+        decimal piece_rate_earnings
+        decimal materials_subsidized_value
+        decimal net_payout
+        string status &quot;draft | approved | disbursed&quot;
+    }
+</code></pre>
+<hr>
+<h2>4. Module Specifications</h2>
+<h3>Module 1: Public Web Portal &amp; Mini Virtual Store (<code>/</code>, <code>/store</code>, <code>/programs</code>)</h3>
+<ul>
+<li><strong>Advocacy &amp; Landing Page (<code>/</code>):</strong> Hero section with human editorial typography, UP Gawad Tsanselor badge, circular craftsmanship pillars, verified community metrics, and authentic artisan testimonials.</li>
+<li><strong>Livelihood Trainings (<code>/programs</code>):</strong> Detailed breakdown of accredited skills training (industrial lockstitch, overlock edging, zero-waste cutting) in partnership with UP CHE and UP College of Fine Arts.</li>
+<li><strong>Mini Virtual Store (<code>/store</code>):</strong><ul>
+<li>Category filters (<em>Upcycled Eco-Bags</em>, <em>Fabric Baskets</em>, <em>Denim Pouches</em>, <em>Home Crafts</em>).</li>
+<li>Product preview modal with artisan stories and sustainable material disclosures.</li>
+<li>Slide-over shopping cart and 2-step checkout with GCash, Bank Transfer, and Cash on Pickup.</li>
+</ul>
+</li>
+</ul>
+<h3>Module 2: Main Command Center (<code>/admin</code>)</h3>
+<p>Organized with a dedicated, responsive <strong>Sidebar Navigation</strong>:</p>
+<h4>2a. Asset Operations &amp; Interactive Map Tracker</h4>
+<ul>
+<li><strong>Leaflet / OpenStreetMap Integration:</strong> Live visual map of UP Diliman workshop buildings with interactive pins.</li>
+<li><strong>Stationary Asset Monitoring:</strong> Tracks machine status (<em>Online / In Production</em>, <em>Idle / Standby</em>, <em>Maintenance Check</em>).</li>
+<li><strong>Asset-Linked DTR Check-In:</strong> Members clock in at their assigned machinery, recording hours worked, fabric meters consumed, and finished units produced.</li>
+<li><strong>Relocation Tracker:</strong> Records machine transfers between workshop hubs with reason and date logging.</li>
+<li><strong>View Mode Switcher:</strong> Instant toggle between interactive Map View and Grid Cards.</li>
+</ul>
+<h4>2b. Supplies Inventory &amp; Ordering System</h4>
+<ul>
+<li>Subsidized raw materials catalog with real-time stock counters and low-inventory alerts.</li>
+<li>Big-touch request form for artisans to requisition production materials.</li>
+<li>Admin approval queue for 1-click supply release.</li>
+</ul>
+<h4>2c. Shopping Hub &amp; Orders</h4>
+<ul>
+<li>Order processing board with status transitions (<code>pending</code> $\rightarrow$ <code>in_production</code> $\rightarrow$ <code>ready_for_pickup</code> $\rightarrow$ <code>completed</code>).</li>
+<li>Customer delivery info and revenue tracking directly tied to member wages.</li>
+</ul>
+<h4>2d. Accounting &amp; Member Payroll (Varied Product Releases &amp; Auto-Computation)</h4>
+<ul>
+<li><strong>Varied Product Output Tracking:</strong> Tracks actual, itemized finished goods released per artisan across diverse product categories:<ul>
+<li><em>BUPCA Signature Denim Tote Bags</em> (Piece-rate: ₱75/unit)</li>
+<li><em>Handcrafted Foldable Bread &amp; Storage Baskets</em> (Piece-rate: ₱55/unit)</li>
+<li><em>Compact Multi-Compartment Denim Utility Pouches</em> (Piece-rate: ₱45/unit)</li>
+<li><em>Community Canvas Patchwork Aprons</em> (Piece-rate: ₱85/unit)</li>
+</ul>
+</li>
+<li><strong>Automated Mathematical Computation Engine:</strong>
+$$\text{Hourly Allowance} = \text{Monitored DTR Hours} \times \text{Hourly Rate (₱85/hr)}$$
+$$\text{Total Piece-Rate Earnings} = \sum_{i} (\text{Units Produced}_i \times \text{Item Piece Rate}_i)$$
+$$\text{Gross Labor Earnings} = \text{Hourly Allowance} + \text{Total Piece-Rate Earnings}$$
+$$\text{Net Artisan Take-Home} = \text{Gross Labor Earnings} + \text{Incentives/Bonus}$$
+<em>(Raw material costs are 100% subsidized by PWD BUPCA grants and institutional donors; ₱0 deducted from artisan earnings).</em></li>
+<li><strong>Auto-Compute Batch Modal:</strong> Allows supervisors to choose an artisan, set monitored workshop hours, add varied product rows with dynamic multipliers, and preview the live net take-home before generating records.</li>
+<li><strong>DTR Integration:</strong> Automatically pulls logged product type, unit output, and piece-rate credit from station clock-in events into draft payroll records.</li>
+<li><strong>Transparent Pay Slips:</strong> Printable official statements itemizing varied products released, hourly allowances, grant subsidies, and net earnings.</li>
+</ul>
+<h4>2e. Website Content Manager (CMS with Full CRUD across 5 Sub-Tabs)</h4>
+<ul>
+<li><strong>Tab 1: Landing Page &amp; Storytelling:</strong><ul>
+<li>Hero headline prefix, italic serif accent, and narrative subtitle.</li>
+<li>UP Gawad Tsanselor 2025 recognition notices.</li>
+<li>Organization Mission and Vision statements.</li>
+<li>Public impact metrics (<em>100% PWD Artisan Made</em>, <em>2.4+ Tons Fabric</em>, <em>3 Workshop Hubs</em>).</li>
+<li>Corporate B2B and institutional partnership callouts.</li>
+</ul>
+</li>
+<li><strong>Tab 2: Livelihood Programs (Full CRUD):</strong><ul>
+<li>Create, Read, Update, and Delete vocational curricula displayed on <code>/programs</code>.</li>
+<li>Configurable title, institutional academic partner (<em>e.g., UP CHE, UP Fine Arts</em>), overview description, deliverables tags, cohort duration, and seat capacity.</li>
+</ul>
+</li>
+<li><strong>Tab 3: Community Artisan Profiles (Full CRUD):</strong><ul>
+<li>Create, Read, Update, and Delete public artisan profiles on <code>/community</code>.</li>
+<li>Configurable artisan name, determination title (<em>e.g. Master Sewing Artisan with Hearing Determination</em>), bio story, primary craft skills, workshop hub, years with BUPCA, featured status, and explicit <strong>DPA RA 10173 Informed Consent Verification toggle</strong>.</li>
+</ul>
+</li>
+<li><strong>Tab 4: News Bulletins &amp; Events (Full CRUD):</strong><ul>
+<li>Create, Read, Update, and Delete bulletins displayed on <code>/news</code>.</li>
+<li>Configurable category (<em>Milestone, Event, Training, Partnership, Advocacy</em>), publication date, title, excerpt, full body text, location tag, and author.</li>
+</ul>
+</li>
+<li><strong>Tab 5: Artisan Store Catalog (Full CRUD):</strong><ul>
+<li>Create, Read, Update, and Delete products displayed on <code>/store</code> and landing showcase.</li>
+<li>Configurable retail price, stock inventory, artisan attribution, waste-reduction materials, photos, featured toggle, and <strong>labor piece-rate</strong> (auto-synchronized with Accounting &amp; Payroll).</li>
+</ul>
+</li>
+<li>Direct preview navigation links to <code>/</code>, <code>/programs</code>, <code>/community</code>, <code>/news</code>, and <code>/store</code>.</li>
+</ul>
+<h4>2f. Public News &amp; Events Portal (<code>/news</code>)</h4>
+<ul>
+<li>Interactive public bulletin board with category filters (<code>All</code>, <code>Milestones</code>, <code>Events</code>, <code>Training</code>, <code>Partnerships</code>, <code>Advocacy</code>).</li>
+<li>Top featured story card with high-impact visual presentation.</li>
+<li>Interactive modal reader with full story details and social sharing context.</li>
+<li>Embedded Data Privacy Act (RA 10173) transparency disclosure informing visitors of journalistic ethics and consent-backed reporting.</li>
+</ul>
+<h4>2g. PWD Community Members &amp; Artisan Showcase (<code>/community</code>)</h4>
+<ul>
+<li>Ethical empowerment directory celebrating the talents, craft competencies, and resilience of BUPCA artisans.</li>
+<li>Filterable by craft competency (<em>Industrial Lockstitch, Patchwork &amp; Quilting, Quality Control, Loom Weaving</em>).</li>
+<li>Interactive story drawer modal highlighting personal vocational journey, favorite creations, and direct links to order their handcrafted items.</li>
+<li>Strict adherence to Philippine Data Privacy Act (RA 10173): displays voluntary informed consent verification badges, omits clinical medical records, and keeps all personal contact info strictly confidential.</li>
+</ul>
+<h4>2h. Statutory Legal Disclosures &amp; Whitepapers</h4>
+<ul>
+<li><strong>Data Privacy Disclosure (<code>/privacy</code>):</strong> Comprehensive policy under Republic Act No. 10173 and National Privacy Commission (NPC) circulars. Outlines legitimate purpose, proportionality, 6 statutory data subject rights (access, rectification, erasure, damages, data portability, complaint filing), data minimization on sensitive personal information (disability status), and DPO contact details.</li>
+<li><strong>Terms of Service (<code>/terms</code>):</strong> Detailed agreement governing circular economy upcycled handcrafted goods, artisan piece-rate transparency, fair-trade social enterprise standards, B2B corporate commissions, and payment procedures (GCash, BPI UP Campus, Cash on Pickup).</li>
+</ul>
+<h4>2i. Developer &amp; Master Database Module</h4>
+<ul>
+<li>Centralized CRUD management interface categorized into:<ul>
+<li><strong>Machinery &amp; Assets:</strong> Tag, name, category, workshop location, specs, status.</li>
+<li><strong>Members &amp; Users:</strong> Name, role (<em>Member Operator, Admin, Superuser</em>), disability group, contact phone.</li>
+<li><strong>Store Catalog:</strong> Product name, price, stock quota, artisan attribution, materials, photo.</li>
+<li><strong>Supplies Stock:</strong> Item name, category, stock, unit, threshold, subsidies.</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2>5. Local Running &amp; Deployment Guide</h2>
+<pre><code class="language-bash"># Navigate to the Next.js project
+cd pwd-bupca-app
+
+# Install dependencies (if fresh clone)
+npm install
+
+# Start development server
+npm run dev
+
+# Build for production
+npm run build
+</code></pre>
+<ul>
+<li><strong>Master Presentation Overview:</strong> Comprehensive deck for sponsors, public, and community in <a href="./OVERVIEW.md"><code>OVERVIEW.md</code></a>.</li>
+<li><strong>Database:</strong> Deploy schema using <a href="./supabase_schema.sql"><code>supabase_schema.sql</code></a> in your Supabase SQL Editor.</li>
+<li><strong>Client Onboarding Template:</strong> Collect real production data using <a href="./CLIENT_DATABASE_TEMPLATE.md"><code>CLIENT_DATABASE_TEMPLATE.md</code></a>.</li>
+<li><strong>Hosting:</strong> Ready for zero-config deployment on <strong>Vercel</strong>.</li>
+</ul>
