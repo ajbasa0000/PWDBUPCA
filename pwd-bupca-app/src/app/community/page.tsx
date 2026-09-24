@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { useAccessibility } from '@/context/AccessibilityContext';
+import { ArtisanAvatarPlaceholder } from '@/components/ArtisanAvatarPlaceholder';
 
 export default function CommunityPage() {
   const { playChime } = useAccessibility();
@@ -79,25 +80,17 @@ export default function CommunityPage() {
               <div>
                 {/* Photo & Badge */}
                 <div className="relative h-60 bg-zinc-100 dark:bg-zinc-800 overflow-hidden">
-                  <img
-                    src={member.photo}
-                    alt={member.preferredName}
-                    className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500"
+                  <ArtisanAvatarPlaceholder
+                    name={member.preferredName}
+                    role={member.artisanRole}
+                    size="hero"
+                    showConsentBadge={member.consentSigned}
                   />
                   <div className="absolute top-3 left-3">
                     <span className="px-2.5 py-1 rounded-md bg-black/60 backdrop-blur-xs text-white text-[10px] font-bold uppercase tracking-wider">
                       Member since {member.joinedYear}
                     </span>
                   </div>
-
-                  {member.consentSigned && (
-                    <div className="absolute bottom-3 right-3">
-                      <span className="px-2 py-0.5 rounded-md bg-emerald-500/90 text-white text-[9px] font-bold flex items-center gap-1 shadow-xs">
-                        <CheckCircle className="w-2.5 h-2.5" />
-                        <span>Consent Verified</span>
-                      </span>
-                    </div>
-                  )}
                 </div>
 
                 {/* Profile Details */}
@@ -206,10 +199,11 @@ export default function CommunityPage() {
             </div>
 
             <div className="relative h-60 w-full rounded-2xl overflow-hidden bg-zinc-100 dark:bg-zinc-800">
-              <img
-                src={selectedMember.photo}
-                alt={selectedMember.preferredName}
-                className="w-full h-full object-cover"
+              <ArtisanAvatarPlaceholder
+                name={selectedMember.preferredName}
+                role={selectedMember.artisanRole}
+                size="hero"
+                showConsentBadge={selectedMember.consentSigned}
               />
             </div>
 

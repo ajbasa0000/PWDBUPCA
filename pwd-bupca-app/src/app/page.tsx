@@ -28,6 +28,7 @@ import { mockProducts, mockPartners } from '@/data/mockData';
 import { PartnerClient } from '@/types';
 import { defaultWebsiteContent } from '@/data/websiteContent';
 import { useAccessibility } from '@/context/AccessibilityContext';
+import { ArtisanAvatarPlaceholder } from '@/components/ArtisanAvatarPlaceholder';
 
 export default function HomePage() {
   const { playChime } = useAccessibility();
@@ -54,14 +55,14 @@ export default function HomePage() {
       name: "Elena Santos",
       role: "Lead Master Artisan • Hearing Impaired",
       story: "Through PWD BUPCA and the UP CHE training, I mastered the high-speed lockstitch machine. Today, I create eco-totes and generate consistent income for my family with complete independence and dignity.",
-      avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=250",
+      avatar: "",
       tag: "Lockstitch Specialist"
     },
     {
       name: "Ramil Bautista",
       role: "Overlock Edging Specialist • Mobility Impaired",
       story: "The adaptive workstation setup at Area 2 UP Campus allows me to operate the overlock machine easily. We don't need charity—we need opportunities and tools. BUPCA provides both.",
-      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=250",
+      avatar: "",
       tag: "Overlock Operator"
     }
   ];
@@ -446,10 +447,10 @@ export default function HomePage() {
 
                   <div className="mt-8 pt-6 border-t border-zinc-100 dark:border-zinc-800 flex items-center justify-between">
                     <div className="flex items-center gap-4">
-                      <img
-                        src={t.avatar}
-                        alt={t.name}
-                        className="w-14 h-14 rounded-2xl object-cover border-2 border-blue-500 shadow"
+                      <ArtisanAvatarPlaceholder
+                        name={t.name}
+                        size="md"
+                        className="border-2 border-blue-500 shadow"
                       />
                       <div>
                         <h4 className="font-extrabold text-base text-zinc-900 dark:text-white">

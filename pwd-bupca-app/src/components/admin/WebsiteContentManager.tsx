@@ -100,7 +100,7 @@ export const WebsiteContentManager: React.FC<ContentManagerProps> = ({
     publishedDate: new Date().toISOString().split('T')[0],
     eventDate: '',
     eventLocation: '',
-    image: 'https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&q=80&w=800',
+    image: '/partners/UNIVERSITY OF THE PHILIPPINES.png',
     featured: false,
     author: 'PWD BUPCA Communications'
   });
@@ -115,7 +115,7 @@ export const WebsiteContentManager: React.FC<ContentManagerProps> = ({
     bio: '',
     workshopStation: 'UP CHE Community Workshop',
     specialties: ['Lockstitch Operation', 'Denim Fabric Assembly'],
-    photo: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=400',
+    photo: '',
     featuredProducts: [],
     joinedYear: '2025',
     consentSigned: true
@@ -312,7 +312,7 @@ export const WebsiteContentManager: React.FC<ContentManagerProps> = ({
       publishedDate: new Date().toISOString().split('T')[0],
       eventDate: '',
       eventLocation: 'Barangay UP Campus, Diliman QC',
-      image: 'https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&q=80&w=800',
+      image: '/partners/UNIVERSITY OF THE PHILIPPINES.png',
       featured: false,
       author: 'PWD BUPCA Communications'
     });
@@ -395,7 +395,7 @@ export const WebsiteContentManager: React.FC<ContentManagerProps> = ({
       bio: '',
       workshopStation: 'UP CHE Community Workshop',
       specialties: ['Lockstitch Operation', 'Precision Fabric Seaming'],
-      photo: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=400',
+      photo: '',
       featuredProducts: [],
       joinedYear: '2025',
       consentSigned: true
