@@ -25,7 +25,10 @@ import {
   ShoppingBag,
   MapPin,
   Package,
-  Sparkles
+  Sparkles,
+  Key,
+  Eye,
+  EyeOff
 } from 'lucide-react';
 import { useAccessibility } from '@/context/AccessibilityContext';
 
@@ -76,10 +79,14 @@ export const DatabaseManager: React.FC<DatabaseManagerProps> = ({
     lastMaintenance: '2026-03-20',
   });
 
+  const [visiblePasswords, setVisiblePasswords] = useState<Record<string, boolean>>({});
+  const [showModalPassword, setShowModalPassword] = useState(false);
+
   // Form State for Member / User
   const [userForm, setUserForm] = useState({
     fullName: '',
     username: '',
+    password: '',
     email: '',
     role: 'member_operator' as UserRole,
     disability: 'None' as DisabilityType,
@@ -128,6 +135,7 @@ export const DatabaseManager: React.FC<DatabaseManagerProps> = ({
       setUserForm({
         fullName: '',
         username: `user_${Math.floor(10 + Math.random() * 90)}`,
+        password: 'determination2026',
         email: '',
         role: 'member_operator',
         disability: 'None',
@@ -183,6 +191,7 @@ export const DatabaseManager: React.FC<DatabaseManagerProps> = ({
         setUserForm({
           fullName: u.fullName,
           username: u.username || '',
+          password: u.password || 'determination2026',
           email: u.email || '',
           role: u.role,
           disability: u.disability,
@@ -228,7 +237,13 @@ export const DatabaseManager: React.FC<DatabaseManagerProps> = ({
     if (activeCategory === 'assets') {
       setAssets((prev) => prev.filter((a) => a.id !== id));
     } else if (activeCategory === 'members') {
-      setUsers((prev) => prev.filter((u) => u.id !== id));
+      setUsers((prev) => {
+        const updated = prev.filter((u) => u.id !== id);
+        try {
+          localStorage.setItem('pwd_bupca_users', JSON.stringify(updated));
+        } catch (e) {}
+        return updated;
+      });
     } else if (activeCategory === 'products') {
       setProducts((prev) => prev.filter((p) => p.id !== id));
     } else if (activeCategory === 'supplies') {
@@ -266,15 +281,25 @@ export const DatabaseManager: React.FC<DatabaseManagerProps> = ({
       }
     } else if (activeCategory === 'members') {
       if (editingId) {
-        setUsers((prev) =>
-          prev.map((u) => (u.id === editingId ? { ...u, ...userForm } : u))
-        );
+        setUsers((prev) => {
+          const updated = prev.map((u) => (u.id === editingId ? { ...u, ...userForm } : u));
+          try {
+            localStorage.setItem('pwd_bupca_users', JSON.stringify(updated));
+          } catch (e) {}
+          return updated;
+        });
       } else {
         const newUser: UserProfile = {
           id: `usr-${Date.now()}`,
           ...userForm,
         };
-        setUsers((prev) => [newUser, ...prev]);
+        setUsers((prev) => {
+          const updated = [newUser, ...prev];
+          try {
+            localStorage.setItem('pwd_bupca_users', JSON.stringify(updated));
+          } catch (e) {}
+          return updated;
+        });
       }
     } else if (activeCategory === 'products') {
       if (editingId) {
@@ -463,6 +488,7 @@ export const DatabaseManager: React.FC<DatabaseManagerProps> = ({
                 <tr>
                   <th className="py-2.5 px-3">Full Name</th>
                   <th className="py-2.5 px-3">Username</th>
+                  <th className="py-2.5 px-3">Password</th>
                   <th className="py-2.5 px-3">Role</th>
                   <th className="py-2.5 px-3">Disability Group</th>
                   <th className="py-2.5 px-3">Contact</th>
@@ -482,6 +508,21 @@ export const DatabaseManager: React.FC<DatabaseManagerProps> = ({
                       </td>
                       <td className="py-2.5 px-3 font-mono font-bold text-blue-600 dark:text-blue-400">
                         {u.username || <span className="text-slate-400 font-normal italic">not set</span>}
+                      </td>
+                      <td className="py-2.5 px-3">
+                        <div className="flex items-center gap-1.5 font-mono text-[11px] bg-slate-100 dark:bg-zinc-800/80 px-2 py-0.5 rounded-md border border-slate-200 dark:border-zinc-700 w-fit">
+                          <span>
+                            {visiblePasswords[u.id] ? (u.password || 'determination2026') : '••••••••'}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => setVisiblePasswords(prev => ({ ...prev, [u.id]: !prev[u.id] }))}
+                            className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer"
+                            title={visiblePasswords[u.id] ? "Hide password" : "Show password"}
+                          >
+                            {visiblePasswords[u.id] ? <EyeOff className="w-3 h-3" /> : <Eye className="w-3 h-3" />}
+                          </button>
+                        </div>
                       </td>
                       <td className="py-2.5 px-3">
                         <span className={`px-2 py-0.5 rounded text-[10px] font-semibold ${
@@ -795,18 +836,44 @@ export const DatabaseManager: React.FC<DatabaseManagerProps> = ({
                       />
                     </div>
                   </div>
-                  <div>
-                    <label className="block font-medium mb-1">System Role</label>
-                    <select
-                      value={userForm.role}
-                      onChange={(e) => setUserForm({ ...userForm, role: e.target.value as UserRole })}
-                      className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-zinc-700 bg-white dark:bg-zinc-800"
-                    >
-                      <option value="member_operator">Member Operator (Artisan)</option>
-                      <option value="admin">Admin / Workshop Supervisor</option>
-                      <option value="superuser">Superuser / Executive</option>
-                      <option value="customer">Customer</option>
-                    </select>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block font-medium mb-1">System Role</label>
+                      <select
+                        value={userForm.role}
+                        onChange={(e) => setUserForm({ ...userForm, role: e.target.value as UserRole })}
+                        className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-zinc-700 bg-white dark:bg-zinc-800"
+                      >
+                        <option value="member_operator">Member Operator (Artisan)</option>
+                        <option value="admin">Admin / Workshop Supervisor</option>
+                        <option value="superuser">Superuser / Executive</option>
+                        <option value="customer">Customer</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block font-medium mb-1 flex items-center justify-between">
+                        <span>Password *</span>
+                        <button
+                          type="button"
+                          onClick={() => setShowModalPassword(!showModalPassword)}
+                          className="text-[10px] text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1 cursor-pointer"
+                        >
+                          {showModalPassword ? <EyeOff className="w-2.5 h-2.5" /> : <Eye className="w-2.5 h-2.5" />}
+                          {showModalPassword ? 'Hide' : 'Show'}
+                        </button>
+                      </label>
+                      <div className="relative">
+                        <input
+                          type={showModalPassword ? "text" : "password"}
+                          required
+                          value={userForm.password}
+                          onChange={(e) => setUserForm({ ...userForm, password: e.target.value })}
+                          placeholder="e.g. determination2026"
+                          className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 font-mono text-xs pr-8"
+                        />
+                        <Key className="w-3.5 h-3.5 absolute right-2.5 top-3 text-slate-400" />
+                      </div>
+                    </div>
                   </div>
                   <div>
                     <label className="block font-medium mb-1">Disability Classification</label>

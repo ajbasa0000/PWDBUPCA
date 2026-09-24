@@ -104,7 +104,35 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onLoginSuccess }) => {
     setErrorMsg(null);
 
     const lookupKey = identifier.trim().toLowerCase();
-    const account = AUTHORIZED_ACCOUNTS[lookupKey];
+    
+    // Check localStorage users first for any dynamic CRUD updates
+    let matchedAccount: { pass: string; fullName: string; role: 'superuser' | 'member_operator' | 'admin'; email: string } | null = null;
+    
+    if (typeof window !== 'undefined') {
+      try {
+        const stored = localStorage.getItem('pwd_bupca_users');
+        if (stored) {
+          const parsedUsers = JSON.parse(stored);
+          if (Array.isArray(parsedUsers)) {
+            const found = parsedUsers.find((u: any) => 
+              (u.username && u.username.toLowerCase() === lookupKey) ||
+              (u.email && u.email.toLowerCase() === lookupKey)
+            );
+            if (found) {
+              matchedAccount = {
+                pass: found.password || 'determination2026',
+                fullName: found.fullName,
+                role: (found.role === 'customer' ? 'member_operator' : found.role) || 'member_operator',
+                email: found.email || `${found.username || 'user'}@pwd-bupca.org`
+              };
+            }
+          }
+        }
+      } catch (e) {}
+    }
+
+    // Fallback to built-in authorized accounts directory
+    const account = matchedAccount || AUTHORIZED_ACCOUNTS[lookupKey];
 
     setTimeout(() => {
       setIsLoading(false);

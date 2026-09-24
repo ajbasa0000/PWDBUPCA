@@ -93,8 +93,19 @@ export default function AdminCommandCenter() {
   });
   const [locations, setLocations] = useState<WorkshopLocation[]>(mockLocations);
   const [products, setProducts] = useState<StoreProduct[]>(mockProducts);
-  const [users, setUsers] = useState<UserProfile[]>(mockUsers);
   const [supplies, setSupplies] = useState<SupplyItem[]>(mockSupplies);
+  const [users, setUsers] = useState<UserProfile[]>(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const stored = localStorage.getItem('pwd_bupca_users');
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        }
+      } catch (e) {}
+    }
+    return mockUsers;
+  });
   const [orders, setOrders] = useState<StoreOrder[]>(mockOrders);
   const [payrolls, setPayrolls] = useState(mockPayrolls);
   const [websiteContent, setWebsiteContent] = useState<WebsiteContent>(defaultWebsiteContent);
