@@ -38,16 +38,16 @@ export const AccessibilityToolbar: React.FC = () => {
   };
 
   return (
-    <div className="fixed bottom-5 right-5 z-50">
+    <div className="fixed bottom-4 right-4 sm:bottom-5 sm:right-5 z-50">
       {/* Floating Trigger Button */}
       {!isOpen && (
         <button
           onClick={handleToggle}
-          className="flex items-center gap-2 px-3.5 py-2.5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-full shadow-lg font-medium border border-slate-700 dark:border-slate-200 text-xs sm:text-sm cursor-pointer transition-transform hover:scale-105 focus:ring-2 focus:ring-blue-500"
+          className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-2 sm:py-2.5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-full shadow-lg font-medium border border-slate-700 dark:border-slate-200 text-xs sm:text-sm cursor-pointer transition-transform hover:scale-105 focus:ring-2 focus:ring-blue-500"
           aria-label="Open Accessibility Menu"
           aria-expanded={isOpen}
         >
-          <Eye className="w-4 h-4 text-blue-400 dark:text-blue-600" aria-hidden="true" />
+          <Eye className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-400 dark:text-blue-600" aria-hidden="true" />
           <span>Accessibility</span>
         </button>
       )}
@@ -55,7 +55,7 @@ export const AccessibilityToolbar: React.FC = () => {
       {/* Accessibility Drawer / Panel */}
       {isOpen && (
         <div 
-          className="w-80 sm:w-96 bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-2xl shadow-2xl p-5 text-slate-800 dark:text-slate-100 animate-in fade-in zoom-in-95 duration-150"
+          className="w-[calc(100vw-2rem)] max-w-sm sm:w-96 bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-2xl shadow-2xl p-4 sm:p-5 text-slate-800 dark:text-slate-100 animate-in fade-in zoom-in-95 duration-150 max-h-[85vh] overflow-y-auto"
           role="dialog"
           aria-modal="true"
           aria-label="Accessibility Settings"

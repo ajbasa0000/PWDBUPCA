@@ -304,13 +304,15 @@ export const MemberIDCard: React.FC<MemberIDCardProps> = ({
         </div>
       )}
 
-      {/* Card Render */}
-      <div className="w-full flex justify-center">
-        {activeTab === 'front' ? (
-          <MemberIDCardFront member={member} />
-        ) : (
-          <MemberIDCardBack member={member} />
-        )}
+      {/* Card Render Container (Responsively centered and scrollable on small mobile) */}
+      <div className="w-full flex justify-center overflow-x-auto py-1 px-1">
+        <div className="scale-[0.82] xs:scale-90 sm:scale-100 origin-top shrink-0 transition-transform">
+          {activeTab === 'front' ? (
+            <MemberIDCardFront member={member} />
+          ) : (
+            <MemberIDCardBack member={member} />
+          )}
+        </div>
       </div>
 
       {mode === 'interactive' && (
