@@ -46,8 +46,12 @@ export const Navbar: React.FC = () => {
             className="flex items-center gap-2 sm:gap-3.5 group rounded-2xl p-0.5 sm:p-1 transition-all focus:ring-4 focus:ring-blue-500 shrink min-w-0"
           >
             <div className="relative flex items-center justify-center shrink-0">
-              <div className="w-9 h-9 sm:w-13 sm:h-13 rounded-xl sm:rounded-2xl bg-gradient-to-tr from-blue-700 via-indigo-600 to-sky-500 text-white flex items-center justify-center font-black text-base sm:text-xl tracking-wider shadow-md shadow-blue-500/20 group-hover:scale-105 transition-all">
-                PB
+              <div className="w-10 h-10 sm:w-13 sm:h-13 rounded-xl sm:rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200/80 dark:border-zinc-800 p-1 flex items-center justify-center shadow-md group-hover:scale-105 transition-all">
+                <img
+                  src="/logo.png"
+                  alt="PWD BUPCA Logo"
+                  className="w-full h-full object-contain filter contrast-105"
+                />
               </div>
               <span className="absolute -bottom-0.5 -right-0.5 flex h-3 w-3 sm:h-4 sm:w-4">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>

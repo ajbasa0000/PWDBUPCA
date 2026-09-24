@@ -24,6 +24,15 @@ const newsreader = Newsreader({
 export const metadata: Metadata = {
   title: "PWD BUPCA Inc. | Empowering Persons with Determination",
   description: "Official portal of PWD BUPCA Inc. (Barangay UP Campus Association). Livelihood trainings, upcycled sustainable crafts, and community command center.",
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/logo-square.png', type: 'image/png' },
+    ],
+    apple: [
+      { url: '/apple-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
+  },
 };
 
 export const viewport = {

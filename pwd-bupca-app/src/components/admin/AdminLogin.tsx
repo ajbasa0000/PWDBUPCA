@@ -175,8 +175,12 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onLoginSuccess }) => {
       <div className="w-full max-w-md space-y-6">
         {/* Brand Header */}
         <div className="text-center space-y-3">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-3xl bg-gradient-to-tr from-blue-700 via-indigo-600 to-sky-500 text-white font-black text-2xl shadow-xl shadow-blue-500/25 mb-1">
-            PB
+          <div className="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-white dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 p-2 shadow-xl shadow-blue-500/10 mb-1">
+            <img
+              src="/logo.png"
+              alt="PWD BUPCA Logo"
+              className="w-full h-full object-contain"
+            />
           </div>
           <div>
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-950/80 border border-blue-200 dark:border-blue-900 text-blue-700 dark:text-blue-400 text-xs font-extrabold mb-2">

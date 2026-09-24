@@ -8,9 +8,13 @@ export const Footer: React.FC = () => {
     <footer className="bg-white dark:bg-zinc-950 border-t border-zinc-200 dark:border-zinc-800 py-12 text-zinc-500 text-xs mt-auto">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8">
         <div className="md:col-span-2 space-y-3">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-xl bg-blue-700 text-white flex items-center justify-center font-black text-sm">
-              PB
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-0.5 flex items-center justify-center shadow-xs">
+              <img
+                src="/logo.png"
+                alt="PWD BUPCA Logo"
+                className="w-full h-full object-contain"
+              />
             </div>
             <span className="font-extrabold text-base text-zinc-900 dark:text-white">
               PWD BUPCA Inc.

@@ -63,11 +63,20 @@ export default function AboutPage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-3xl space-y-6">
               
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white dark:bg-zinc-900 border border-zinc-200/80 dark:border-zinc-800 shadow-xs">
-                <span className="flex h-2 w-2 rounded-full bg-emerald-500"></span>
-                <span className="text-xs font-bold text-zinc-700 dark:text-zinc-300">
-                  Persons with Disability in Barangay UP Campus Association, Inc.
-                </span>
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200/80 dark:border-zinc-800 p-1 flex items-center justify-center shadow-xs shrink-0">
+                  <img
+                    src="/logo.png"
+                    alt="PWD BUPCA Logo"
+                    className="w-full h-full object-contain"
+                  />
+                </div>
+                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white dark:bg-zinc-900 border border-zinc-200/80 dark:border-zinc-800 shadow-xs">
+                  <span className="flex h-2 w-2 rounded-full bg-emerald-500"></span>
+                  <span className="text-xs font-bold text-zinc-700 dark:text-zinc-300">
+                    Persons with Disability in Barangay UP Campus Association, Inc.
+                  </span>
+                </div>
               </div>
 
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-zinc-900 dark:text-white tracking-tight leading-[1.1]">
