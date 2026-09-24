@@ -7,7 +7,8 @@ import {
   DTRRecord, 
   PayrollRecord,
   UserProfile,
-  PartnerClient
+  PartnerClient,
+  OrgMilestone
 } from '@/types';
 
 export const mockLocations: WorkshopLocation[] = [
@@ -1244,6 +1245,162 @@ export const mockPartners: PartnerClient[] = [
     description: 'Neighborhood safety volunteers assisting in disaster response and community mobility for PWDs.',
     collaborationType: 'Community Partner',
     activeStatus: true,
+  }
+];
+
+export const mockMilestones: OrgMilestone[] = [
+  {
+    id: 'mls-2022-01',
+    year: '2022',
+    dateRange: 'July – August 2022',
+    title: 'Oplan PWD Office & Workshop Renovation',
+    subtitle: 'Transforming Pook Dagohoy into an Accessible Community Creative Space',
+    category: 'Renovation',
+    summary: 'Grassroots initiative approved by Barangay UP Campus 7th Council. Partnered with UP Office of the Campus Architect (Engr. Ferdinand San Valentin, Camille Dajay) and Urban Sketchers QC. Upcycled discarded wood crates into chairs and storage cabinets using ₱3,500 community donations.',
+    achievements: [
+      'Pook Dagohoy Court recreation room transformed into PWD Training and Production Hub',
+      'Community wall murals painted by Urban Sketchers QC alongside PWD youth artists',
+      'Zero-waste furniture fabricated entirely from reclaimed wooden shipping crates'
+    ],
+    partnersInvolved: ['Barangay UP Campus 7th Council', 'UP Office of Campus Architect', 'Urban Sketchers QC'],
+    beneficiaryCount: 15,
+    highlightIcon: 'Paintbrush',
+    featured: false
+  },
+  {
+    id: 'mls-2022-02',
+    year: '2022',
+    dateRange: 'October – December 2022',
+    title: 'Eco Stars Livelihood Project with BPI & Angat Buhay',
+    subtitle: 'Inaugural Social Enterprise: Upcycling Bank Brochures into Holiday Decor',
+    category: 'Livelihood',
+    summary: 'Partnered with Bank of the Philippine Islands (BPI) QC East Team Green, Angat Buhay, and UP College of Fine Arts (Prof. Marc San Valentin, Mary Velmonte). 20 PWD artisans, solo parents, and women survivors handcrafted Eco-Stars from decommissioned brochures and magazines.',
+    achievements: [
+      'Generated ₱284,536.00 gross revenue from corporate sales across BPI QC branches',
+      'Sold at ₱300 per box of 6 handmade stars to BPI clients and institutional patrons',
+      '100% of proceeds disbursed directly to artisans before Christmas based on production volume'
+    ],
+    partnersInvolved: ['Bank of the Philippine Islands (BPI)', 'Angat Buhay', 'UP College of Fine Arts'],
+    beneficiaryCount: 20,
+    grossIncome: 284536,
+    highlightIcon: 'Sparkles',
+    featured: true
+  },
+  {
+    id: 'mls-2023-01',
+    year: '2023',
+    dateRange: 'January – March 2023',
+    title: 'Financial Literacy & Ukay Buhay Initiative',
+    subtitle: 'Strengthening Financial Capacity & Circular Garments',
+    category: 'Enterprise',
+    summary: 'Conducted comprehensive financial management workshops with Liwanag ng Masilaw and Safe City Philippines. Launched Ukay Buhay circular apparel sales from donated Japanese garments, providing immediate auxiliary earnings.',
+    achievements: [
+      '24 beneficiaries trained in personal budgeting and cooperative savings',
+      'Raised ₱8,320.00 additional income across 4 neighborhood vending clusters',
+      'Built accounting foundation for independent enterprise scaling'
+    ],
+    partnersInvolved: ['Liwanag ng Masilaw', 'Safe City Philippines'],
+    beneficiaryCount: 24,
+    grossIncome: 8320,
+    highlightIcon: 'TrendingUp',
+    featured: false
+  },
+  {
+    id: 'mls-2023-02',
+    year: '2023',
+    dateRange: 'September – December 2023',
+    title: 'UP ISSI Enterprise Training & Macramé Eco-Stars',
+    subtitle: 'Transition to Self-Sufficiency & Textile Upcycling',
+    category: 'Livelihood',
+    summary: 'Artisans attended formal Enterprise Development Training at UP ISSI, crafting business plans for social enterprise. Upgraded Eco-Stars using upcycled textile scraps and macramé knotting techniques. Showcased at the 1-Week UP Palma Hall Christmas Bazaar.',
+    achievements: [
+      'Completed UP ISSI social enterprise business planning modules',
+      'Grossed ₱85,000.00 in macramé star sales sold across BPI banking halls',
+      'Achieved self-management: PWD-BUPCA handled manufacturing, accounting, and logistics independently'
+    ],
+    partnersInvolved: ['UP ISSI', 'UP College of Fine Arts', 'BPI QC East Team Green'],
+    beneficiaryCount: 28,
+    grossIncome: 85000,
+    highlightIcon: 'ShoppingBag',
+    featured: true
+  },
+  {
+    id: 'mls-2024-01',
+    year: '2024',
+    dateRange: 'October – December 2024',
+    title: 'UP CHE Partnership & First Industrial Sewing Machine',
+    subtitle: 'Mastering Machine Craftsmanship with UP College of Home Economics',
+    category: 'Institutional',
+    summary: 'Partnered with UP College of Home Economics (Dean Shirley Guevarra) to train 22 artisans in eco-basket weaving and industrial sewing. Reinvested accumulated earnings to acquire PWD-BUPCA’s very first high-speed sewing machine.',
+    achievements: [
+      'Acquired organization’s first dedicated industrial lockstitch machine from self-generated capital',
+      'Produced 230 eco-baskets, 30 tote bags, and 2 shoulder bags',
+      'Generated ₱35,500.00 gross revenue with initial raw material capital of only ₱5,000'
+    ],
+    partnersInvolved: ['UP College of Home Economics', 'UP CWGS', 'UP Gender and Development Office', 'BAYI Inc.'],
+    beneficiaryCount: 22,
+    grossIncome: 35500,
+    unitsProduced: 262,
+    highlightIcon: 'Award',
+    featured: true
+  },
+  {
+    id: 'mls-2025-01',
+    year: '2025',
+    dateRange: 'March 2025',
+    title: 'Pook Daan Tubo Fire Disaster Response & Textile Rescue',
+    subtitle: 'Turning Post-Disaster Waste into Sustainable Artisan Opportunity',
+    category: 'Disaster Response',
+    summary: 'Following a severe community fire in Pook Daan Tubo, uncollected clothing donations were slated for landfill disposal. BUPCA members rescued 8 full sacks of textiles, sanitized, washed, and cut them into materials for signature upcycled tote bags.',
+    achievements: [
+      'Rescued 8 large sacks of rain-soaked textiles destined for garbage trucks',
+      'Prevented hundreds of kilograms of solid fabric waste from polluting waterways',
+      'Supplied 100% of raw fabric required for the 2025 tote bag production run with zero material purchase cost'
+    ],
+    partnersInvolved: ['Barangay UP Campus Relief Volunteers', 'Pook Daan Tubo Neighborhood'],
+    beneficiaryCount: 35,
+    highlightIcon: 'HeartHandshake',
+    featured: true
+  },
+  {
+    id: 'mls-2025-02',
+    year: '2025',
+    dateRange: 'May – December 2025',
+    title: 'Flagship Eco-Tote Scale-Up & Urban Hydroponics',
+    subtitle: 'Climate Action, Circular Design & Food Sovereignty',
+    category: 'Livelihood',
+    summary: 'UP CHE collaboration expanded to Hydroponics sa Ugnayan sa Pamayanan and commercial catering food preparation. Scaled upcycled Eco-Tote production, selling 490 bags and 450 Eco-Stars. Conducted knowledge transfer of hydroponics to Village A.',
+    achievements: [
+      'Sold 490 Eco-Tote Bags (₱76,900) and 450 Eco-Stars (₱22,500) totaling ₱99,400.00',
+      'Installed community hydroponics beds at Pook Palaris and trained Village A residents',
+      'Trained PWD entrepreneurs in commercial food safety and shelf-life preservation'
+    ],
+    partnersInvolved: ['UP College of Home Economics', 'UP Padayon', 'Village A Community Council'],
+    beneficiaryCount: 45,
+    grossIncome: 99400,
+    unitsProduced: 940,
+    highlightIcon: 'Leaf',
+    featured: true
+  },
+  {
+    id: 'mls-2026-01',
+    year: '2026',
+    dateRange: 'January – June 2026',
+    title: 'Amber’s & BPI Corporate Orders Milestone',
+    subtitle: 'Mass Production for Major Enterprises & Uniform Upcycling',
+    category: 'Enterprise',
+    summary: 'Secured first corporate contract with Amber’s to fabricate 300 custom Eco Pouch Bags for their Mother’s Day national campaign. Partnered with BPI to upcycle decommissioned teller uniforms as inner lining for 2026 tote bags.',
+    achievements: [
+      'Fulfilled 300 custom branded Eco Pouches for Amber’s corporate branches (₱30,000)',
+      'Upcycled sacks of retired BPI teller uniforms into lining for corporate canvas bags (₱35,000)',
+      'Brought cumulative 2022–2026 artisan sales to ₱540,506.00 across 50 active members'
+    ],
+    partnersInvolved: ['Amber’s Food Chain', 'Bank of the Philippine Islands', 'UP CHE'],
+    beneficiaryCount: 50,
+    grossIncome: 85250,
+    unitsProduced: 435,
+    highlightIcon: 'ShieldCheck',
+    featured: true
   }
 ];
 

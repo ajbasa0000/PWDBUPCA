@@ -10,8 +10,10 @@ import {
   UserRole,
   DisabilityType,
   AssetStatus,
-  PartnerClient
+  PartnerClient,
+  OrgMilestone
 } from '@/types';
+import { mockMilestones } from '@/data/mockData';
 import { 
   Database, 
   Plus, 
@@ -31,7 +33,8 @@ import {
   Eye,
   EyeOff,
   Handshake,
-  ExternalLink
+  ExternalLink,
+  Calendar
 } from 'lucide-react';
 import { useAccessibility } from '@/context/AccessibilityContext';
 
@@ -48,9 +51,11 @@ interface DatabaseManagerProps {
   setSupplies: React.Dispatch<React.SetStateAction<SupplyItem[]>>;
   partners: PartnerClient[];
   setPartners: React.Dispatch<React.SetStateAction<PartnerClient[]>>;
+  milestones?: OrgMilestone[];
+  setMilestones?: React.Dispatch<React.SetStateAction<OrgMilestone[]>>;
 }
 
-type EntityCategory = 'assets' | 'members' | 'products' | 'locations' | 'supplies' | 'partners';
+type EntityCategory = 'assets' | 'members' | 'products' | 'locations' | 'supplies' | 'partners' | 'milestones';
 
 export const DatabaseManager: React.FC<DatabaseManagerProps> = ({
   assets,
@@ -65,8 +70,26 @@ export const DatabaseManager: React.FC<DatabaseManagerProps> = ({
   setSupplies,
   partners,
   setPartners,
+  milestones: externalMilestones,
+  setMilestones: setExternalMilestones,
 }) => {
   const { playChime, speakText } = useAccessibility();
+  const [internalMilestones, setInternalMilestones] = useState<OrgMilestone[]>(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const stored = localStorage.getItem('pwd_bupca_milestones');
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        }
+      } catch (e) {}
+    }
+    return mockMilestones;
+  });
+
+  const milestones = externalMilestones || internalMilestones;
+  const setMilestones = setExternalMilestones || setInternalMilestones;
+
   const [activeCategory, setActiveCategory] = useState<EntityCategory>('assets');
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -134,6 +157,22 @@ export const DatabaseManager: React.FC<DatabaseManagerProps> = ({
     activeStatus: true,
   });
 
+  // Form State for Milestone
+  const [milestoneForm, setMilestoneForm] = useState({
+    year: '2026',
+    dateRange: 'January – June 2026',
+    title: '',
+    subtitle: '',
+    category: 'Livelihood' as OrgMilestone['category'],
+    summary: '',
+    achievementsText: '',
+    partnersInvolvedText: '',
+    beneficiaryCount: 20,
+    grossIncome: 0,
+    unitsProduced: 0,
+    featured: true,
+  });
+
   // Open Create Modal
   const handleOpenCreate = () => {
     playChime('click');
@@ -189,6 +228,21 @@ export const DatabaseManager: React.FC<DatabaseManagerProps> = ({
         collaborationType: 'Training & Facilities',
         websiteUrl: '',
         activeStatus: true,
+      });
+    } else if (activeCategory === 'milestones') {
+      setMilestoneForm({
+        year: '2026',
+        dateRange: 'January – June 2026',
+        title: '',
+        subtitle: '',
+        category: 'Livelihood',
+        summary: '',
+        achievementsText: '',
+        partnersInvolvedText: '',
+        beneficiaryCount: 20,
+        grossIncome: 0,
+        unitsProduced: 0,
+        featured: true,
       });
     }
     setIsModalOpen(true);
@@ -266,6 +320,24 @@ export const DatabaseManager: React.FC<DatabaseManagerProps> = ({
           activeStatus: part.activeStatus,
         });
       }
+    } else if (activeCategory === 'milestones') {
+      const mls = milestones.find((m) => m.id === id);
+      if (mls) {
+        setMilestoneForm({
+          year: mls.year,
+          dateRange: mls.dateRange,
+          title: mls.title,
+          subtitle: mls.subtitle || '',
+          category: mls.category,
+          summary: mls.summary,
+          achievementsText: mls.achievements ? mls.achievements.join('\n') : '',
+          partnersInvolvedText: mls.partnersInvolved ? mls.partnersInvolved.join(', ') : '',
+          beneficiaryCount: mls.beneficiaryCount || 0,
+          grossIncome: mls.grossIncome || 0,
+          unitsProduced: mls.unitsProduced || 0,
+          featured: mls.featured ?? true,
+        });
+      }
     }
     setIsModalOpen(true);
   };
@@ -294,6 +366,14 @@ export const DatabaseManager: React.FC<DatabaseManagerProps> = ({
         const updated = prev.filter((p) => p.id !== id);
         try {
           localStorage.setItem('pwd_bupca_partners', JSON.stringify(updated));
+        } catch (e) {}
+        return updated;
+      });
+    } else if (activeCategory === 'milestones') {
+      setMilestones((prev) => {
+        const updated = prev.filter((m) => m.id !== id);
+        try {
+          localStorage.setItem('pwd_bupca_milestones', JSON.stringify(updated));
         } catch (e) {}
         return updated;
       });
@@ -405,6 +485,66 @@ export const DatabaseManager: React.FC<DatabaseManagerProps> = ({
           return updated;
         });
       }
+    } else if (activeCategory === 'milestones') {
+      const achievements = milestoneForm.achievementsText
+        .split('\n')
+        .map((s) => s.trim())
+        .filter(Boolean);
+      const partnersInvolved = milestoneForm.partnersInvolvedText
+        .split(',')
+        .map((s) => s.trim())
+        .filter(Boolean);
+
+      if (editingId) {
+        setMilestones((prev) => {
+          const updated = prev.map((m) =>
+            m.id === editingId
+              ? {
+                  ...m,
+                  year: milestoneForm.year,
+                  dateRange: milestoneForm.dateRange,
+                  title: milestoneForm.title,
+                  subtitle: milestoneForm.subtitle || undefined,
+                  category: milestoneForm.category,
+                  summary: milestoneForm.summary,
+                  achievements,
+                  partnersInvolved,
+                  beneficiaryCount: milestoneForm.beneficiaryCount || undefined,
+                  grossIncome: milestoneForm.grossIncome || undefined,
+                  unitsProduced: milestoneForm.unitsProduced || undefined,
+                  featured: milestoneForm.featured,
+                }
+              : m
+          );
+          try {
+            localStorage.setItem('pwd_bupca_milestones', JSON.stringify(updated));
+          } catch (e) {}
+          return updated;
+        });
+      } else {
+        const newMilestone: OrgMilestone = {
+          id: `mls-${Date.now()}`,
+          year: milestoneForm.year,
+          dateRange: milestoneForm.dateRange,
+          title: milestoneForm.title,
+          subtitle: milestoneForm.subtitle || undefined,
+          category: milestoneForm.category,
+          summary: milestoneForm.summary,
+          achievements,
+          partnersInvolved,
+          beneficiaryCount: milestoneForm.beneficiaryCount || undefined,
+          grossIncome: milestoneForm.grossIncome || undefined,
+          unitsProduced: milestoneForm.unitsProduced || undefined,
+          featured: milestoneForm.featured,
+        };
+        setMilestones((prev) => {
+          const updated = [newMilestone, ...prev];
+          try {
+            localStorage.setItem('pwd_bupca_milestones', JSON.stringify(updated));
+          } catch (e) {}
+          return updated;
+        });
+      }
     }
 
     setIsModalOpen(false);
@@ -424,7 +564,7 @@ export const DatabaseManager: React.FC<DatabaseManagerProps> = ({
             </h2>
           </div>
           <p className="text-xs text-slate-500 mt-0.5">
-            Full CRUD configuration for machinery, staff/members, store catalog, supplies, and partners & clients.
+            Full CRUD configuration for machinery, staff/members, store catalog, supplies, partners & clients, and milestones.
           </p>
         </div>
 
@@ -433,7 +573,7 @@ export const DatabaseManager: React.FC<DatabaseManagerProps> = ({
           className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs shadow-xs cursor-pointer transition self-start md:self-auto"
         >
           <Plus className="w-4 h-4" />
-          <span>Add New {activeCategory === 'partners' ? 'Partner/Client' : activeCategory.slice(0, -1).toUpperCase()}</span>
+          <span>Add New {activeCategory === 'partners' ? 'Partner/Client' : activeCategory === 'milestones' ? 'Milestone' : activeCategory.slice(0, -1).toUpperCase()}</span>
         </button>
       </div>
 
@@ -446,6 +586,7 @@ export const DatabaseManager: React.FC<DatabaseManagerProps> = ({
             { id: 'products', label: `Store Catalog (${products.length})`, icon: ShoppingBag },
             { id: 'supplies', label: `Supplies Stock (${supplies.length})`, icon: Package },
             { id: 'partners', label: `Partners & Clients (${partners.length})`, icon: Handshake },
+            { id: 'milestones', label: `Milestones (${milestones.length})`, icon: Calendar },
           ].map((cat) => {
             const Icon = cat.icon;
             const isActive = activeCategory === cat.id;
@@ -840,6 +981,84 @@ export const DatabaseManager: React.FC<DatabaseManagerProps> = ({
                             onClick={() => handleDelete(part.id, part.name)}
                             className="p-1.5 rounded-lg border border-rose-200 dark:border-rose-900/50 hover:bg-rose-50 dark:hover:bg-rose-950 text-rose-600 cursor-pointer"
                             title="Delete Partner/Client"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+
+        {/* 6. MILESTONES TABLE */}
+        {activeCategory === 'milestones' && (
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs">
+              <thead className="border-b border-slate-100 dark:border-zinc-800 text-slate-400 font-medium">
+                <tr>
+                  <th className="py-2.5 px-3">Year & Milestone</th>
+                  <th className="py-2.5 px-3">Category</th>
+                  <th className="py-2.5 px-3">Revenue / Output</th>
+                  <th className="py-2.5 px-3">Beneficiaries</th>
+                  <th className="py-2.5 px-3 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100 dark:divide-zinc-800">
+                {milestones
+                  .filter((m) =>
+                    m.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    m.year.includes(searchQuery) ||
+                    m.category.toLowerCase().includes(searchQuery.toLowerCase())
+                  )
+                  .map((mls) => (
+                    <tr key={mls.id} className="hover:bg-slate-50/50 dark:hover:bg-zinc-800/30">
+                      <td className="py-2.5 px-3 font-semibold text-slate-900 dark:text-white">
+                        <div className="flex items-center gap-2">
+                          <span className="px-2 py-0.5 rounded-full text-[10px] font-black bg-blue-100 dark:bg-blue-950 text-blue-800 dark:text-blue-300">
+                            {mls.year}
+                          </span>
+                          <span className="truncate max-w-[200px] sm:max-w-xs">{mls.title}</span>
+                        </div>
+                        <span className="text-[10px] text-slate-400 font-normal block truncate mt-0.5">
+                          {mls.dateRange} • {mls.summary}
+                        </span>
+                      </td>
+                      <td className="py-2.5 px-3">
+                        <span className="px-2 py-0.5 rounded-md text-[10px] font-medium bg-slate-100 dark:bg-zinc-800 text-slate-700 dark:text-slate-300">
+                          {mls.category}
+                        </span>
+                      </td>
+                      <td className="py-2.5 px-3">
+                        {mls.grossIncome ? (
+                          <span className="font-bold text-emerald-600 dark:text-emerald-400">
+                            ₱{mls.grossIncome.toLocaleString()}
+                          </span>
+                        ) : (
+                          <span className="text-slate-400 font-mono text-[11px]">—</span>
+                        )}
+                        {mls.unitsProduced ? (
+                          <span className="text-[10px] text-slate-400 block">{mls.unitsProduced} units</span>
+                        ) : null}
+                      </td>
+                      <td className="py-2.5 px-3 font-mono text-slate-600 dark:text-slate-300">
+                        {mls.beneficiaryCount ? `${mls.beneficiaryCount} artisans` : '—'}
+                      </td>
+                      <td className="py-2.5 px-3 text-right">
+                        <div className="flex items-center justify-end gap-1.5">
+                          <button
+                            onClick={() => handleOpenEdit(mls.id)}
+                            className="p-1.5 rounded-lg border border-slate-200 dark:border-zinc-700 hover:bg-slate-100 dark:hover:bg-zinc-800 text-slate-600 cursor-pointer"
+                            title="Edit Milestone"
+                          >
+                            <Edit3 className="w-3.5 h-3.5" />
+                          </button>
+                          <button
+                            onClick={() => handleDelete(mls.id, mls.title)}
+                            className="p-1.5 rounded-lg border border-rose-200 dark:border-rose-900/50 hover:bg-rose-50 dark:hover:bg-rose-950 text-rose-600 cursor-pointer"
+                            title="Delete Milestone"
                           >
                             <Trash2 className="w-3.5 h-3.5" />
                           </button>
@@ -1326,6 +1545,160 @@ export const DatabaseManager: React.FC<DatabaseManagerProps> = ({
                     />
                     <label htmlFor="partnerActiveStatus" className="text-slate-700 dark:text-slate-300 font-medium">
                       Active Partner / Client (Shown on website)
+                    </label>
+                  </div>
+                </>
+              )}
+
+              {/* MILESTONE FORM */}
+              {activeCategory === 'milestones' && (
+                <>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block font-medium mb-1">Year *</label>
+                      <input
+                        type="text"
+                        required
+                        value={milestoneForm.year}
+                        onChange={(e) => setMilestoneForm({ ...milestoneForm, year: e.target.value })}
+                        placeholder="2026"
+                        className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 font-bold"
+                      />
+                    </div>
+                    <div>
+                      <label className="block font-medium mb-1">Date Range *</label>
+                      <input
+                        type="text"
+                        required
+                        value={milestoneForm.dateRange}
+                        onChange={(e) => setMilestoneForm({ ...milestoneForm, dateRange: e.target.value })}
+                        placeholder="January – June 2026"
+                        className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-zinc-700 bg-white dark:bg-zinc-800"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block font-medium mb-1">Milestone Title *</label>
+                    <input
+                      type="text"
+                      required
+                      value={milestoneForm.title}
+                      onChange={(e) => setMilestoneForm({ ...milestoneForm, title: e.target.value })}
+                      placeholder="e.g. Amber's & BPI Corporate Orders Milestone"
+                      className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-zinc-700 bg-white dark:bg-zinc-800"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block font-medium mb-1">Subtitle / Tagline (Optional)</label>
+                    <input
+                      type="text"
+                      value={milestoneForm.subtitle}
+                      onChange={(e) => setMilestoneForm({ ...milestoneForm, subtitle: e.target.value })}
+                      placeholder="e.g. Mass Production for Major Enterprises & Uniform Upcycling"
+                      className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-zinc-700 bg-white dark:bg-zinc-800"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block font-medium mb-1">Category</label>
+                      <select
+                        value={milestoneForm.category}
+                        onChange={(e) =>
+                          setMilestoneForm({
+                            ...milestoneForm,
+                            category: e.target.value as OrgMilestone['category'],
+                          })
+                        }
+                        className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-zinc-700 bg-white dark:bg-zinc-800"
+                      >
+                        <option value="Livelihood">Livelihood</option>
+                        <option value="Enterprise">Enterprise</option>
+                        <option value="Institutional">Institutional</option>
+                        <option value="Renovation">Renovation</option>
+                        <option value="Disaster Response">Disaster Response</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block font-medium mb-1">Gross Revenue (₱)</label>
+                      <input
+                        type="number"
+                        value={milestoneForm.grossIncome}
+                        onChange={(e) => setMilestoneForm({ ...milestoneForm, grossIncome: parseFloat(e.target.value) || 0 })}
+                        placeholder="0"
+                        className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 font-mono"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block font-medium mb-1">Beneficiary Count</label>
+                      <input
+                        type="number"
+                        value={milestoneForm.beneficiaryCount}
+                        onChange={(e) => setMilestoneForm({ ...milestoneForm, beneficiaryCount: parseInt(e.target.value) || 0 })}
+                        className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-zinc-700 bg-white dark:bg-zinc-800"
+                      />
+                    </div>
+                    <div>
+                      <label className="block font-medium mb-1">Units Produced</label>
+                      <input
+                        type="number"
+                        value={milestoneForm.unitsProduced}
+                        onChange={(e) => setMilestoneForm({ ...milestoneForm, unitsProduced: parseInt(e.target.value) || 0 })}
+                        className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-zinc-700 bg-white dark:bg-zinc-800"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block font-medium mb-1">Summary Description *</label>
+                    <textarea
+                      rows={2}
+                      required
+                      value={milestoneForm.summary}
+                      onChange={(e) => setMilestoneForm({ ...milestoneForm, summary: e.target.value })}
+                      placeholder="Brief narrative of the milestone and its community impact..."
+                      className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-zinc-700 bg-white dark:bg-zinc-800"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block font-medium mb-1">Key Outcomes / Achievements (1 per line)</label>
+                    <textarea
+                      rows={2}
+                      value={milestoneForm.achievementsText}
+                      onChange={(e) => setMilestoneForm({ ...milestoneForm, achievementsText: e.target.value })}
+                      placeholder="Generated ₱85,000 gross revenue&#10;Rescued 8 sacks of discarded fabric"
+                      className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-zinc-700 bg-white dark:bg-zinc-800"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block font-medium mb-1">Partners Involved (Comma separated)</label>
+                    <input
+                      type="text"
+                      value={milestoneForm.partnersInvolvedText}
+                      onChange={(e) => setMilestoneForm({ ...milestoneForm, partnersInvolvedText: e.target.value })}
+                      placeholder="Bank of the Philippine Islands, UP CHE, Amber's"
+                      className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-zinc-700 bg-white dark:bg-zinc-800"
+                    />
+                  </div>
+
+                  <div className="flex items-center gap-2 pt-1">
+                    <input
+                      type="checkbox"
+                      id="milestoneFeatured"
+                      checked={milestoneForm.featured}
+                      onChange={(e) => setMilestoneForm({ ...milestoneForm, featured: e.target.checked })}
+                      className="rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                    />
+                    <label htmlFor="milestoneFeatured" className="text-slate-700 dark:text-slate-300 font-medium">
+                      Featured Milestone (Prominently displayed)
                     </label>
                   </div>
                 </>

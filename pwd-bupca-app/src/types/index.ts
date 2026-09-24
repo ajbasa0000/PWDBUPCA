@@ -200,6 +200,23 @@ export interface PartnerClient {
   activeStatus: boolean;
 }
 
+export interface OrgMilestone {
+  id: string;
+  year: string;
+  dateRange: string;
+  title: string;
+  subtitle?: string;
+  category: 'Livelihood' | 'Renovation' | 'Disaster Response' | 'Institutional' | 'Enterprise';
+  summary: string;
+  achievements: string[];
+  partnersInvolved: string[];
+  beneficiaryCount?: number;
+  grossIncome?: number;
+  unitsProduced?: number;
+  highlightIcon?: string;
+  featured?: boolean;
+}
+
 export interface NewsItem {
   id: string;
   title: string;

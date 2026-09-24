@@ -15,7 +15,8 @@ import {
   Users,
   Menu,
   X,
-  FileText
+  FileText,
+  Award
 } from 'lucide-react';
 import { useAccessibility } from '@/context/AccessibilityContext';
 
@@ -26,6 +27,7 @@ export const Navbar: React.FC = () => {
 
   const navLinks = [
     { href: '/', label: 'Advocacy', icon: Home },
+    { href: '/about', label: 'About', icon: Award },
     { href: '/programs', label: 'Livelihood', icon: BookOpen },
     { href: '/community', label: 'Community', icon: Users },
     { href: '/news', label: 'News', icon: Sparkles },

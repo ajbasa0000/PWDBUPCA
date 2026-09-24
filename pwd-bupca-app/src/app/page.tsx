@@ -125,6 +125,15 @@ export default function HomePage() {
                     <Compass className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                     <span>Livelihood Trainings</span>
                   </Link>
+
+                  <Link
+                    href="/about"
+                    onClick={() => playChime('click')}
+                    className="inline-flex items-center justify-center gap-2 px-5 py-4 rounded-2xl bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-900/60 text-blue-800 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/40 font-bold text-sm sm:text-base shadow-xs transition-all"
+                  >
+                    <Award className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                    <span>Our Story & Milestones</span>
+                  </Link>
                 </div>
 
                 {/* Key Pillars Checklist */}
