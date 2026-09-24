@@ -46,7 +46,7 @@ export const Navbar: React.FC = () => {
             className="flex items-center gap-2 sm:gap-3.5 group rounded-2xl p-0.5 sm:p-1 transition-all focus:ring-4 focus:ring-blue-500 shrink min-w-0"
           >
             <div className="relative flex items-center justify-center shrink-0">
-              <div className="w-10 h-10 sm:w-13 sm:h-13 rounded-xl sm:rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200/80 dark:border-zinc-800 p-1 flex items-center justify-center shadow-md group-hover:scale-105 transition-all">
+              <div className="h-10 w-11 sm:h-13 sm:w-14 rounded-xl sm:rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200/80 dark:border-zinc-800 p-0.5 sm:p-1 flex items-center justify-center shadow-md group-hover:scale-105 transition-all">
                 <img
                   src="/logo.png"
                   alt="PWD BUPCA Logo"

@@ -92,7 +92,7 @@ export default function AboutPage() {
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-4 border-t border-zinc-200/60 dark:border-zinc-800/80">
                 <div className="p-3 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200/70 dark:border-zinc-800">
                   <span className="text-xs text-zinc-400 font-semibold block">Total Revenue</span>
-                  <span className="text-xl sm:text-2xl font-black text-zinc-900 dark:text-white">₱540k+</span>
+                  <span className="text-xl sm:text-2xl font-black text-zinc-900 dark:text-white">₱575k+</span>
                   <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold block mt-0.5">100% to Artisans</span>
                 </div>
                 <div className="p-3 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200/70 dark:border-zinc-800">
@@ -326,40 +326,68 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* FLAGSHIP PROPOSAL: SOLAR-POWERED SOCIAL ENTERPRISE HUB */}
+        {/* FLAGSHIP PROPOSAL: GREENSTITCH QC */}
         <section className="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="relative rounded-[2.5rem] overflow-hidden bg-gradient-to-br from-zinc-900 via-slate-900 to-blue-950 text-white p-8 sm:p-14 shadow-2xl border border-zinc-800">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
               
               <div className="lg:col-span-7 space-y-6">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-400/20 text-amber-300 text-xs font-bold border border-amber-400/30">
-                  <Sun className="w-3.5 h-3.5 text-amber-400" />
-                  <span>Flagship 2026–2028 Proposal</span>
+                <div className="flex flex-wrap items-center gap-2">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-400/20 text-amber-300 text-xs font-bold border border-amber-400/30">
+                    <Sun className="w-3.5 h-3.5 text-amber-400" />
+                    <span>Project Proposal</span>
+                  </div>
+                  <span className="text-[11px] font-bold px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                    Inclusive Livelihood & Climate-Conscious Upcycling
+                  </span>
                 </div>
 
-                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black leading-tight">
-                  The Solar-Powered Eco-Social Enterprise Hub
-                </h2>
+                <div className="space-y-2">
+                  <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black leading-tight tracking-tight">
+                    GREENSTITCH QC: <br className="hidden sm:inline" />
+                    <span className="text-blue-400 font-serif italic font-normal text-2xl sm:text-3xl lg:text-4xl block mt-1">
+                      Stitching Sustainability through PWD-Inclusive Textile Upcycling
+                    </span>
+                  </h2>
+                  <p className="text-xs sm:text-sm font-semibold text-blue-200">
+                    A Sustainable Eco-Social Enterprise and Inclusive Development Hub of PWD-BUPCA, Inc.
+                  </p>
+                </div>
 
-                <p className="text-sm sm:text-base text-zinc-300 leading-relaxed font-normal">
-                  Our comprehensive project plan to build a permanent, inclusive, and net-zero community production facility in UP Campus. The hub will house dedicated sewing rooms, food and pastry kiosks for PWD bakers, an exhibition showroom, and rooftop solar power to guarantee clean, zero-cost operational electricity.
-                </p>
-
-                {/* 5-Phase Plan Badges */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-                  <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10 space-y-1">
-                    <span className="text-[10px] font-mono text-amber-400 uppercase tracking-wider block">Phase 1 & 2</span>
-                    <h4 className="text-xs font-bold text-white">Facility Development & Machinery Setup</h4>
-                    <p className="text-[11px] text-zinc-400">Universal accessibility ramps, JUKI lockstitch stations, and safety work benches.</p>
+                {/* The Problem & Solution Breakdown */}
+                <div className="space-y-3 pt-1">
+                  <div className="p-4 rounded-2xl bg-white/5 border border-white/10 space-y-1.5">
+                    <span className="text-[11px] font-mono font-bold text-rose-300 uppercase tracking-wider block">
+                      The Challenge
+                    </span>
+                    <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed">
+                      PWDs and other vulnerable/marginalized members of Barangay UP Campus lack a permanent, accessible facility for basic and health services, livelihood training, production, and market access—limiting their ability to earn sustainable income while reusing waste materials.
+                    </p>
                   </div>
-                  <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10 space-y-1">
-                    <span className="text-[10px] font-mono text-emerald-400 uppercase tracking-wider block">Phase 3 & 4</span>
-                    <h4 className="text-xs font-bold text-white">Collective Production & Showroom Fairs</h4>
-                    <p className="text-[11px] text-zinc-400">Regular corporate catalog manufacturing, quality control, and buyer visits.</p>
+
+                  <div className="p-4 rounded-2xl bg-blue-900/30 border border-blue-500/30 space-y-1.5">
+                    <span className="text-[11px] font-mono font-bold text-sky-300 uppercase tracking-wider block">
+                      The Solution
+                    </span>
+                    <p className="text-xs sm:text-sm text-zinc-200 leading-relaxed">
+                      Establish a solar-powered Eco-Social Enterprise and Inclusive Development Hub that provides shared production space, skills training, and market linkage so PWDs and other marginalized sectors can turn upcycled materials into sellable products.
+                    </p>
                   </div>
                 </div>
 
-                <div className="flex flex-wrap items-center gap-4 pt-4">
+                {/* Team Size & Budget Note */}
+                <div className="flex flex-wrap items-center gap-4 text-xs text-zinc-300 pt-1">
+                  <div className="flex items-center gap-2">
+                    <Users className="w-4 h-4 text-amber-400 shrink-0" />
+                    <span><strong>~50 Members:</strong> PWDs, women, solo parents, seniors, LGBTQ, volunteers</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                    <span>Seed capital as low as ₱5,000 has grown the program</span>
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-4 pt-3">
                   <Link
                     href="/store"
                     onClick={() => playChime('click')}
@@ -368,7 +396,7 @@ export default function AboutPage() {
                     Support by Procuring Artisan Batches
                   </Link>
                   <a
-                    href="mailto:pwdbupca@gmail.com?subject=Inquiry:%20Solar%20Hub%20Sponsorship"
+                    href="mailto:pwdbupca@gmail.com?subject=Inquiry:%20GREENSTITCH%20QC%20Hub%20Sponsorship"
                     className="px-6 py-3.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-xs sm:text-sm transition-all"
                   >
                     Inquire as Institutional Sponsor
@@ -377,50 +405,74 @@ export default function AboutPage() {
 
               </div>
 
-              {/* Resource Requirements Brief */}
-              <div className="lg:col-span-5 bg-white/5 backdrop-blur-md rounded-3xl p-6 sm:p-8 border border-white/10 space-y-4">
-                <h3 className="font-extrabold text-base text-white flex items-center gap-2">
-                  <Building2 className="w-4 h-4 text-blue-400" />
-                  <span>Proposed Resource Allocations</span>
-                </h3>
+              {/* Right Column: Evidence of Impact & Allocations */}
+              <div className="lg:col-span-5 space-y-4">
                 
-                <div className="space-y-3 text-xs">
-                  <div className="p-3 rounded-xl bg-white/5 border border-white/5 flex items-center justify-between">
-                    <div>
-                      <span className="font-bold text-zinc-200 block">Industrial Sewing Machines</span>
-                      <span className="text-[10px] text-zinc-400">High-speed lockstitch & overlock edging</span>
-                    </div>
-                    <span className="font-mono font-bold text-amber-400">5 Units</span>
+                {/* Evidence of Impact Card */}
+                <div className="bg-gradient-to-br from-amber-500/10 via-white/5 to-white/5 backdrop-blur-md rounded-3xl p-6 border border-amber-500/20 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-mono font-bold text-amber-300 uppercase tracking-wider flex items-center gap-1.5">
+                      <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                      <span>Evidence of Impact</span>
+                    </span>
+                    <span className="text-xs font-black px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                      ₱575,000+ Gross
+                    </span>
                   </div>
-
-                  <div className="p-3 rounded-xl bg-white/5 border border-white/5 flex items-center justify-between">
-                    <div>
-                      <span className="font-bold text-zinc-200 block">Off-Grid Solar Energy Package</span>
-                      <span className="text-[10px] text-zinc-400">PV panels, hybrid inverter, battery storage</span>
-                    </div>
-                    <span className="font-mono font-bold text-emerald-400">3.5 kWp</span>
-                  </div>
-
-                  <div className="p-3 rounded-xl bg-white/5 border border-white/5 flex items-center justify-between">
-                    <div>
-                      <span className="font-bold text-zinc-200 block">Food & Pastry Production Kiosk</span>
-                      <span className="text-[10px] text-zinc-400">Baking ovens & coffee brewing stations</span>
-                    </div>
-                    <span className="font-mono font-bold text-blue-400">2 Stations</span>
-                  </div>
-
-                  <div className="p-3 rounded-xl bg-white/5 border border-white/5 flex items-center justify-between">
-                    <div>
-                      <span className="font-bold text-zinc-200 block">Accessible Showroom & Display</span>
-                      <span className="text-[10px] text-zinc-400">Shelving, lighting, catalog display</span>
-                    </div>
-                    <span className="font-mono font-bold text-purple-400">1 Hub</span>
-                  </div>
+                  <p className="text-xs text-zinc-300 leading-relaxed">
+                    Since 2022, the group’s livelihood products (Eco-Stars, Eco Tote Bags, Eco Baskets, Eco Pouch Bags) have generated <strong>over ₱575,000 in gross income</strong> for beneficiaries, with partnerships from <strong>BPI, UP College of Fine Arts, UP College of Home Economics</strong>, and corporate clients like <strong>Amber’s</strong>.
+                  </p>
+                  <p className="text-xs text-blue-200 font-medium leading-relaxed border-t border-white/10 pt-2">
+                    In just the first half of 2026 alone, the group sold 135 Eco Tote Bags, fulfilled a 300-piece corporate order, and launched a new upcycled-uniform bag line with BPI.
+                  </p>
                 </div>
 
-                <p className="text-[10px] text-zinc-400 leading-normal italic pt-2">
-                  *Detailed specifications available from the official 2026 PWD-BUPCA Entry Document. All equipment will be permanently stewarded by the Association.
-                </p>
+                {/* Resource Requirements Brief */}
+                <div className="bg-white/5 backdrop-blur-md rounded-3xl p-6 border border-white/10 space-y-3">
+                  <h3 className="font-extrabold text-sm text-white flex items-center gap-2">
+                    <Building2 className="w-4 h-4 text-blue-400" />
+                    <span>Proposed Facility & Equipment Breakdown</span>
+                  </h3>
+                  
+                  <div className="space-y-2 text-xs">
+                    <div className="p-2.5 rounded-xl bg-white/5 border border-white/5 flex items-center justify-between">
+                      <div>
+                        <span className="font-bold text-zinc-200 block">Industrial Sewing Machines</span>
+                        <span className="text-[10px] text-zinc-400">High-speed lockstitch & overlock edging</span>
+                      </div>
+                      <span className="font-mono font-bold text-amber-400">5 Units</span>
+                    </div>
+
+                    <div className="p-2.5 rounded-xl bg-white/5 border border-white/5 flex items-center justify-between">
+                      <div>
+                        <span className="font-bold text-zinc-200 block">Off-Grid Solar Energy Package</span>
+                        <span className="text-[10px] text-zinc-400">PV panels, hybrid inverter, battery storage</span>
+                      </div>
+                      <span className="font-mono font-bold text-emerald-400">3.5 kWp</span>
+                    </div>
+
+                    <div className="p-2.5 rounded-xl bg-white/5 border border-white/5 flex items-center justify-between">
+                      <div>
+                        <span className="font-bold text-zinc-200 block">Food & Pastry Production Kiosk</span>
+                        <span className="text-[10px] text-zinc-400">Baking ovens & coffee brewing stations</span>
+                      </div>
+                      <span className="font-mono font-bold text-blue-400">2 Stations</span>
+                    </div>
+
+                    <div className="p-2.5 rounded-xl bg-white/5 border border-white/5 flex items-center justify-between">
+                      <div>
+                        <span className="font-bold text-zinc-200 block">Accessible Showroom & Display</span>
+                        <span className="text-[10px] text-zinc-400">Shelving, lighting, catalog display</span>
+                      </div>
+                      <span className="font-mono font-bold text-purple-400">1 Hub</span>
+                    </div>
+                  </div>
+
+                  <p className="text-[10px] text-zinc-400 leading-normal italic pt-1">
+                    *Full facility budget attached separately (equipment, solar power system, renovation). All equipment permanently stewarded by PWD-BUPCA.
+                  </p>
+                </div>
+
               </div>
 
             </div>
