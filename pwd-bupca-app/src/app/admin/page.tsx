@@ -10,7 +10,9 @@ import {
   mockPayrolls,
   mockProducts,
   mockUsers,
-  mockDTRRecords
+  mockDTRRecords,
+  mockApplications,
+  mockTrainingCohorts
 } from '@/data/mockData';
 import { defaultWebsiteContent, WebsiteContent } from '@/data/websiteContent';
 import { 
@@ -22,7 +24,9 @@ import {
   WorkshopLocation,
   StoreProduct,
   UserProfile,
-  SupplyItem
+  SupplyItem,
+  MembershipApplication,
+  TrainingCohort
 } from '@/types';
 import { AssetTracker } from '@/components/admin/AssetTracker';
 import { SuppliesOrdering } from '@/components/admin/SuppliesOrdering';
@@ -30,6 +34,9 @@ import { OrdersHub } from '@/components/admin/OrdersHub';
 import { AccountingPayroll } from '@/components/admin/AccountingPayroll';
 import { DatabaseManager } from '@/components/admin/DatabaseManager';
 import { WebsiteContentManager } from '@/components/admin/WebsiteContentManager';
+import { MembershipReviewHub } from '@/components/admin/MembershipReviewHub';
+import { SkillsTrainingMatrix } from '@/components/admin/SkillsTrainingMatrix';
+import { FieldWorkerTablet } from '@/components/admin/FieldWorkerTablet';
 import { AdminLogin, AuthUserSession } from '@/components/admin/AdminLogin';
 import { ArtisanPortal } from '@/components/admin/ArtisanPortal';
 import { 
@@ -51,7 +58,11 @@ import {
   LogOut,
   UserCheck,
   ShieldAlert,
-  Clock
+  Clock,
+  UserPlus,
+  GraduationCap,
+  Tablet,
+  FileText
 } from 'lucide-react';
 import { useAccessibility } from '@/context/AccessibilityContext';
 
@@ -64,11 +75,22 @@ export default function AdminCommandCenter() {
     role: 'superuser',
     email: 'ajbasa@up.edu.ph'
   });
-  const [activeTab, setActiveTab] = useState<'assets' | 'supplies' | 'orders' | 'accounting' | 'cms' | 'developer'>('assets');
+  const [activeTab, setActiveTab] = useState<'assets' | 'supplies' | 'orders' | 'accounting' | 'intake' | 'skills' | 'field' | 'cms' | 'developer'>('intake');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   // Interactive Live States
-  const [assets, setAssets] = useState<EquipmentAsset[]>(mockAssets);
+  const [assets, setAssets] = useState<EquipmentAsset[]>(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const stored = localStorage.getItem('pwd_bupca_assets');
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (Array.isArray(parsed) && parsed.length >= 19) return parsed;
+        }
+      } catch (e) {}
+    }
+    return mockAssets;
+  });
   const [locations, setLocations] = useState<WorkshopLocation[]>(mockLocations);
   const [products, setProducts] = useState<StoreProduct[]>(mockProducts);
   const [users, setUsers] = useState<UserProfile[]>(mockUsers);
@@ -77,6 +99,30 @@ export default function AdminCommandCenter() {
   const [payrolls, setPayrolls] = useState(mockPayrolls);
   const [websiteContent, setWebsiteContent] = useState<WebsiteContent>(defaultWebsiteContent);
   const [dtrRecords, setDtrRecords] = useState<DTRRecord[]>(mockDTRRecords);
+  const [applications, setApplications] = useState<MembershipApplication[]>(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const stored = localStorage.getItem('pwd_bupca_applications');
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        }
+      } catch (e) {}
+    }
+    return mockApplications;
+  });
+  const [cohorts, setCohorts] = useState<TrainingCohort[]>(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const stored = localStorage.getItem('pwd_bupca_cohorts');
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        }
+      } catch (e) {}
+    }
+    return mockTrainingCohorts;
+  });
   const [supplyRequests, setSupplyRequests] = useState<SupplyRequest[]>([
     {
       id: 'req-1',
@@ -194,11 +240,32 @@ export default function AdminCommandCenter() {
 
   const operationsNav = [
     { 
+      id: 'intake', 
+      label: 'Membership & Intake', 
+      badge: `${applications.filter(a => a.status === 'pending_review').length} Pending`,
+      icon: UserPlus, 
+      desc: 'Screen, approve & assign members' 
+    },
+    { 
+      id: 'field', 
+      label: 'Field Worker Tablet', 
+      badge: 'Offline PWA',
+      icon: Tablet, 
+      desc: 'Door-to-door Pook census & audio assist' 
+    },
+    { 
       id: 'assets', 
       label: 'Asset Operations & DTR', 
       badge: `${assets.filter(a => a.status === 'online' || a.status === 'in_use').length} Active`,
       icon: Activity, 
       desc: 'Machine status & operator logs' 
+    },
+    { 
+      id: 'skills', 
+      label: 'Skills & Cohorts', 
+      badge: `${cohorts.filter(c => c.status === 'active').length} Active`,
+      icon: GraduationCap, 
+      desc: 'Training matrix & machine pairing' 
     },
     { 
       id: 'supplies', 
@@ -494,6 +561,18 @@ export default function AdminCommandCenter() {
               </div>
               <ExternalLink className="w-3 h-3 text-slate-400" />
             </Link>
+            <a
+              href="/documentation.html"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs font-semibold text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/40"
+            >
+              <div className="flex items-center gap-2">
+                <FileText className="w-3.5 h-3.5" />
+                <span>System Docs & PDF Export</span>
+              </div>
+              <ExternalLink className="w-3 h-3 text-blue-500" />
+            </a>
           </div>
 
         </div>
@@ -586,7 +665,23 @@ export default function AdminCommandCenter() {
 
         {/* Scrollable Content Container */}
         <main id="main-content" className="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto">
-          <div className="max-w-6xl mx-auto space-y-6">
+          <div className="max-w-7xl mx-auto space-y-6">
+            {activeTab === 'intake' && (
+              <MembershipReviewHub
+                applications={applications}
+                assets={assets}
+                onUpdateApplication={(updatedApp) => {
+                  setApplications(prev => {
+                    const next = prev.map(a => a.id === updatedApp.id ? updatedApp : a);
+                    try {
+                      localStorage.setItem('pwd_bupca_applications', JSON.stringify(next));
+                    } catch (e) {}
+                    return next;
+                  });
+                }}
+              />
+            )}
+
             {activeTab === 'assets' && (
               <AssetTracker
                 assets={assets}
@@ -594,6 +689,53 @@ export default function AdminCommandCenter() {
                 products={products}
                 onClockIn={handleClockIn}
                 onRelocate={handleRelocate}
+                onUpdateAsset={(updatedAsset) => {
+                  setAssets(prev => {
+                    const next = prev.map(a => a.id === updatedAsset.id ? updatedAsset : a);
+                    try {
+                      localStorage.setItem('pwd_bupca_assets', JSON.stringify(next));
+                    } catch (e) {}
+                    return next;
+                  });
+                }}
+              />
+            )}
+
+            {activeTab === 'skills' && (
+              <SkillsTrainingMatrix
+                applications={applications}
+                assets={assets}
+                cohorts={cohorts}
+                onUpdateCohorts={(updatedCohorts) => {
+                  setCohorts(updatedCohorts);
+                  try {
+                    localStorage.setItem('pwd_bupca_cohorts', JSON.stringify(updatedCohorts));
+                  } catch (e) {}
+                }}
+                onUpdateAsset={(updatedAsset) => {
+                  setAssets(prev => {
+                    const next = prev.map(a => a.id === updatedAsset.id ? updatedAsset : a);
+                    try {
+                      localStorage.setItem('pwd_bupca_assets', JSON.stringify(next));
+                    } catch (e) {}
+                    return next;
+                  });
+                }}
+              />
+            )}
+
+            {activeTab === 'field' && (
+              <FieldWorkerTablet
+                currentUser={currentUser}
+                onSyncApplications={(newDrafts) => {
+                  setApplications(prev => {
+                    const merged = [...newDrafts, ...prev];
+                    try {
+                      localStorage.setItem('pwd_bupca_applications', JSON.stringify(merged));
+                    } catch (e) {}
+                    return merged;
+                  });
+                }}
               />
             )}
 

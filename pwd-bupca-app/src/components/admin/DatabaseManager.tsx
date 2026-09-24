@@ -68,7 +68,8 @@ export const DatabaseManager: React.FC<DatabaseManagerProps> = ({
   const [assetForm, setAssetForm] = useState({
     assetTag: '',
     name: '',
-    category: 'High-Speed Sewing Machine' as EquipmentAsset['category'],
+    category: 'Industrial High Speed Machine' as EquipmentAsset['category'],
+    brand: 'JUKI INTERNATIONAL' as EquipmentAsset['brand'],
     locationId: locations[0]?.id || '',
     status: 'idle' as AssetStatus,
     specifications: '',
@@ -114,9 +115,10 @@ export const DatabaseManager: React.FC<DatabaseManagerProps> = ({
     setEditingId(null);
     if (activeCategory === 'assets') {
       setAssetForm({
-        assetTag: `BUPCA-AST-${Math.floor(10 + Math.random() * 90)}`,
+        assetTag: `SM-HS-2026-${Math.floor(10 + Math.random() * 90)}`,
         name: '',
-        category: 'High-Speed Sewing Machine',
+        category: 'Industrial High Speed Machine',
+        brand: 'JUKI INTERNATIONAL',
         locationId: locations[0]?.id || '',
         status: 'idle',
         specifications: '',
@@ -168,6 +170,7 @@ export const DatabaseManager: React.FC<DatabaseManagerProps> = ({
           assetTag: ast.assetTag,
           name: ast.name,
           category: ast.category,
+          brand: ast.brand || 'JUKI INTERNATIONAL',
           locationId: ast.locationId,
           status: ast.status,
           specifications: ast.specifications,
@@ -684,19 +687,38 @@ export const DatabaseManager: React.FC<DatabaseManagerProps> = ({
                       className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-zinc-700 bg-white dark:bg-zinc-800"
                     />
                   </div>
-                  <div>
-                    <label className="block font-medium mb-1">Category</label>
-                    <select
-                      value={assetForm.category}
-                      onChange={(e) => setAssetForm({ ...assetForm, category: e.target.value as EquipmentAsset['category'] })}
-                      className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-zinc-700 bg-white dark:bg-zinc-800"
-                    >
-                      <option value="High-Speed Sewing Machine">High-Speed Sewing Machine</option>
-                      <option value="Edging Machine">Edging Machine</option>
-                      <option value="Heavy Cutting Table">Heavy Cutting Table</option>
-                      <option value="Heat Press">Heat Press</option>
-                      <option value="Crafting Station">Crafting Station</option>
-                    </select>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block font-medium mb-1">Category</label>
+                      <select
+                        value={assetForm.category}
+                        onChange={(e) => setAssetForm({ ...assetForm, category: e.target.value as EquipmentAsset['category'] })}
+                        className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-zinc-700 bg-white dark:bg-zinc-800"
+                      >
+                        <option value="Industrial High Speed Machine">Industrial High Speed Machine</option>
+                        <option value="Industrial Edging Machine">Industrial Edging Machine</option>
+                        <option value="Portable Sewing Machine">Portable Sewing Machine</option>
+                        <option value="Old Sewing Machine">Old Sewing Machine (Lola Makina)</option>
+                        <option value="Heavy Cutting Table">Heavy Cutting Table</option>
+                        <option value="Heat Press">Heat Press</option>
+                        <option value="Crafting Station">Crafting Station</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block font-medium mb-1">Brand</label>
+                      <select
+                        value={assetForm.brand}
+                        onChange={(e) => setAssetForm({ ...assetForm, brand: e.target.value as EquipmentAsset['brand'] })}
+                        className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-zinc-700 bg-white dark:bg-zinc-800"
+                      >
+                        <option value="JUKI INTERNATIONAL">JUKI INTERNATIONAL</option>
+                        <option value="SIRUBA">SIRUBA</option>
+                        <option value="SINGER">SINGER</option>
+                        <option value="CHINA">CHINA</option>
+                        <option value="OTHER">OTHER</option>
+                      </select>
+                    </div>
                   </div>
                   <div>
                     <label className="block font-medium mb-1">Stationed Workshop Location</label>

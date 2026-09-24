@@ -35,11 +35,35 @@ export interface WorkshopLocation {
 
 export interface EquipmentAsset {
   id: string;
-  assetTag: string; // e.g. BUPCA-SEW-01
+  assetTag: string; // FA NUMBER: e.g. SM-OM-2024-01, SM-EM-2026-01, SM-HS-2026-01
   name: string;
-  category: 'High-Speed Sewing Machine' | 'Edging Machine' | 'Heavy Cutting Table' | 'Heat Press' | 'Crafting Station';
+  category: 
+    | 'Industrial High Speed Machine' 
+    | 'Industrial Edging Machine' 
+    | 'Portable Sewing Machine' 
+    | 'Old Sewing Machine' 
+    | 'Heavy Cutting Table' 
+    | 'Heat Press' 
+    | 'Crafting Station';
+  brand: 'JUKI INTERNATIONAL' | 'SIRUBA' | 'SINGER' | 'CHINA' | 'OTHER';
+  modelOrClass?: string; // e.g. M1-424NS-F, L-1A / MA-F, LOLA MAKINA, DENIM
+  serialNo?: string; // e.g. Mfg. No. 1LL9TF1730, Mfg. No. E2200104102
+  color?: string; // e.g. WHITE & BLUE, RED, BLACK, GRAY
+  madeIn?: string; // e.g. CHINA
+  datePurchased?: string;
+  
+  // Accountability / Memorandum Receipt (MR)
+  mrNumber?: string; // MR NO: (Memorandum Receipt)
+  issuedTo?: string; // Real Custodian: ROSA ZALUN, JOYZEL SAN VALENTIN, GAYZELLE CALABIO, etc.
+  dateIssued?: string;
+  purpose?: string;
+  conditionUponIssue?: 'Brand New' | 'Slightly Used' | 'Refurbished good as New' | 'Good Condition';
+  dateReturned?: string;
+  conditionUponReturn?: string;
+
+  // Location & Operational Status
   locationId: string;
-  locationName: string;
+  locationName: string; // Specific Pook: 8B CV Francisco Pook Amorsolo, Hardin ng Doña Aurora, Main Hub, etc.
   status: AssetStatus;
   currentOperator?: {
     id: string;
@@ -192,3 +216,104 @@ export interface CommunityMember {
   joinedYear: string;
   consentSigned: boolean; // DPA RA 10173 explicit opt-in confirmation
 }
+
+export type ApplicationType = 'pwd_membership' | 'livelihood_membership' | 'both';
+
+export type DisabilityVisibility = 'apparent' | 'non_apparent' | 'none';
+
+export type OfficialDisabilityCategory =
+  | 'Physical'
+  | 'Intellectual'
+  | 'Learning Disability'
+  | 'Psychosocial'
+  | 'Mental'
+  | 'Hard of Hearing'
+  | 'Deaf'
+  | 'Visual Disability'
+  | 'Speech and Language'
+  | 'Cancer'
+  | 'Chronic Kidney Disease'
+  | 'Multiple Disability'
+  | 'Others';
+
+export type IntersectoralSector = 
+  | 'PWD'
+  | 'Solo Parent'
+  | 'Women Sector'
+  | 'Youth Sector'
+  | 'Senior'
+  | 'LGBTQ'
+  | "Women's Survivor"
+  | 'Out of School Youth';
+
+export type EconomicStatus = 
+  | 'Nagtatrabaho (Employed)'
+  | 'Nagnenegosyo (Self-Employed / Business)'
+  | 'Nag-aaral (Student)'
+  | 'Out of School Youth'
+  | 'Walang Hanapbuhay (Unemployed)'
+  | 'Iba pa (Others)';
+
+export type ApplicationStatus = 'pending_review' | 'approved' | 'needs_info' | 'rejected';
+
+export interface MembershipApplication {
+  id: string;
+  referenceNumber: string; // e.g., APP-2026-0012
+  applicationType: ApplicationType;
+  
+  // Demographics
+  fullName: string; // PANGALAN
+  gender: 'Lalaki (Male)' | 'Babae (Female)' | 'LGBTQ+' | 'Mas pinipiling huwag sabihin (Prefer not to say)';
+  birthdate: string;
+  address: string; // TIRAHAN (e.g. 8B CV Francisco St., Pook Amorsolo, UP Campus)
+  contactNo: string;
+  
+  // PWD Details
+  isPwd: boolean; // IKAW BA AY PWD?
+  hasPwdId: 'may_id' | 'wala' | 'processing'; // MAY ID O WALA
+  pwdIdNo?: string;
+  disabilityVisibility?: DisabilityVisibility; // URI NG KAPANSANAN (APPARENT/NON APPARENT)
+  disabilityCategories: OfficialDisabilityCategory[]; // KATEGORYA NG KAPANSANAN
+  disabilitySpecifyOthers?: string;
+  
+  // Intersectoral & Economic Status
+  sectors: IntersectoralSector[]; // SECTOR NA KINABIBILANGAN
+  economicStatus: EconomicStatus;
+  economicStatusOthers?: string;
+  
+  // Skills & Training Aspirations
+  existingSkills: string[]; // ANU ANG IYONG SKILLS? (e.g. Basic Sewing, Pattern Cutting, Handicrafts)
+  skillsToLearn: string[]; // ANU ANG MGA KASANAYAN NA GUSTONG MATUTUNAN (e.g. Industrial High-Speed Sewing, Edging/Overlock, Bag Making)
+  isLivelihoodMemberInterest: boolean; // MIYEMBRO BA KAYO NG LIVELIHOOD PROGRAM O GUSTONG SUMALI?
+  
+  // Guardian / Parent Support (if assisted)
+  guardianName?: string; // PANGALAN NG GUARDIAN/MAGULANG
+  guardianSkills?: string[]; // ANU ANG SKILLS NG MAGULANG O GUARDIAN
+  guardianContact?: string;
+  
+  // Metadata & Review Workflow
+  assignedMembershipNo?: string; // When approved: e.g. BUPCA-MEM-2026-045
+  status: ApplicationStatus;
+  submissionDate: string;
+  reviewedDate?: string;
+  reviewedBy?: string;
+  reviewNotes?: string;
+  dpaConsent: boolean; // RA 10173 Data Privacy Act consent
+}
+
+export interface TrainingCohort {
+  id: string;
+  title: string;
+  targetSkill: string; // e.g. Industrial High-Speed Sewing Operation
+  partnerLead?: string; // e.g. UP College of Home Economics (CHE)
+  locationName: string; // e.g. UP CHE Workshop or Area 2 Center
+  schedule: string; // e.g. Saturdays, 8:00 AM - 12:00 PM
+  capacity: number;
+  enrolledApplicantIds: string[]; // Applicant IDs of enrolled members
+  assignedAssetTags?: string[]; // e.g. SM-HS-2026-01, SM-EM-2026-02
+  status: 'planning' | 'active' | 'completed';
+  startDate?: string;
+  notes?: string;
+}
+
+
