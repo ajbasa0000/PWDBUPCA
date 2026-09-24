@@ -26,6 +26,12 @@ export const metadata: Metadata = {
   description: "Official portal of PWD BUPCA Inc. (Barangay UP Campus Association). Livelihood trainings, upcycled sustainable crafts, and community command center.",
 };
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{

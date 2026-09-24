@@ -35,27 +35,27 @@ export const Navbar: React.FC = () => {
   return (
     <header className="sticky top-0 z-40 bg-white/95 dark:bg-zinc-950/95 backdrop-blur-xl border-b border-zinc-200/80 dark:border-zinc-800/80 transition-all shadow-xs">
       <div className="max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between min-h-[4.5rem] sm:min-h-[5.5rem] py-2 sm:py-3 gap-2 sm:gap-3">
+        <div className="flex items-center justify-between min-h-[4rem] sm:min-h-[5.5rem] py-2 sm:py-3 gap-1.5 sm:gap-3">
           
           {/* Logo & Brand Identity */}
           <Link 
             href="/" 
             onClick={() => { playChime('click'); setIsMobileMenuOpen(false); }}
-            className="flex items-center gap-2.5 sm:gap-3.5 group rounded-2xl p-1 transition-all focus:ring-4 focus:ring-blue-500 shrink-0 min-w-0"
+            className="flex items-center gap-2 sm:gap-3.5 group rounded-2xl p-0.5 sm:p-1 transition-all focus:ring-4 focus:ring-blue-500 shrink min-w-0"
           >
             <div className="relative flex items-center justify-center shrink-0">
-              <div className="w-10 h-10 sm:w-13 sm:h-13 rounded-2xl bg-gradient-to-tr from-blue-700 via-indigo-600 to-sky-500 text-white flex items-center justify-center font-black text-lg sm:text-xl tracking-wider shadow-md shadow-blue-500/20 group-hover:scale-105 transition-all">
+              <div className="w-9 h-9 sm:w-13 sm:h-13 rounded-xl sm:rounded-2xl bg-gradient-to-tr from-blue-700 via-indigo-600 to-sky-500 text-white flex items-center justify-center font-black text-base sm:text-xl tracking-wider shadow-md shadow-blue-500/20 group-hover:scale-105 transition-all">
                 PB
               </div>
-              <span className="absolute -bottom-0.5 -right-0.5 flex h-3.5 w-3.5 sm:h-4 sm:w-4">
+              <span className="absolute -bottom-0.5 -right-0.5 flex h-3 w-3 sm:h-4 sm:w-4">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-3.5 w-3.5 sm:h-4 sm:w-4 bg-emerald-500 border-2 border-white dark:border-zinc-900"></span>
+                <span className="relative inline-flex rounded-full h-3 w-3 sm:h-4 sm:w-4 bg-emerald-500 border-2 border-white dark:border-zinc-900"></span>
               </span>
             </div>
             
             <div className="flex flex-col justify-center min-w-0">
               <div className="flex items-center gap-1.5 sm:gap-2">
-                <span className="font-black text-lg sm:text-2xl tracking-tight text-zinc-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                <span className="font-black text-base sm:text-2xl tracking-tight text-zinc-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors truncate">
                   PWD BUPCA
                 </span>
                 <span className="hidden md:inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-amber-50 dark:bg-amber-950/70 text-amber-800 dark:text-amber-300 border border-amber-200/90 dark:border-amber-700/80">
@@ -63,8 +63,8 @@ export const Navbar: React.FC = () => {
                   <span>UP Gawad Tsanselor</span>
                 </span>
               </div>
-              <p className="text-[10px] sm:text-xs font-medium text-zinc-500 dark:text-zinc-400 truncate max-w-[170px] sm:max-w-none mt-0.5">
-                Brgy. UP Campus Association • <span className="text-blue-700 dark:text-blue-400 font-semibold">Persons with Determination</span>
+              <p className="text-[9.5px] sm:text-xs font-medium text-zinc-500 dark:text-zinc-400 truncate max-w-[130px] xs:max-w-[170px] sm:max-w-none mt-0.5">
+                Brgy. UP Campus • <span className="text-blue-700 dark:text-blue-400 font-semibold">PWD BUPCA</span>
               </p>
             </div>
           </Link>
@@ -93,7 +93,7 @@ export const Navbar: React.FC = () => {
           </nav>
 
           {/* Right Action buttons */}
-          <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+          <div className="flex items-center gap-1 sm:gap-2 shrink-0">
             {/* Theme Toggle Button */}
             <button
               onClick={toggleTheme}
@@ -102,9 +102,9 @@ export const Navbar: React.FC = () => {
               title={theme === 'dark' ? "Switch to light mode" : "Switch to dark mode"}
             >
               {theme === 'dark' ? (
-                <Sun className="w-4 h-4 text-amber-400" />
+                <Sun className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-400" />
               ) : (
-                <Moon className="w-4 h-4 text-slate-700" />
+                <Moon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-700" />
               )}
             </button>
 
@@ -112,10 +112,11 @@ export const Navbar: React.FC = () => {
             <Link
               href="/membership"
               onClick={() => playChime('click')}
-              className="inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-[11px] sm:text-xs shadow-xs hover:shadow-md transition-all cursor-pointer whitespace-nowrap"
+              className="inline-flex items-center gap-1 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-[11px] sm:text-xs shadow-xs hover:shadow-md transition-all cursor-pointer whitespace-nowrap"
             >
-              <HeartHandshake className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white" />
-              <span>Mag-miyembro</span>
+              <HeartHandshake className="w-3.5 h-3.5 text-white" />
+              <span className="hidden xs:inline">Mag-miyembro</span>
+              <span className="xs:hidden">Sali</span>
             </Link>
 
             {/* Command Center (Hidden on small screens, accessible via hamburger) */}
@@ -135,7 +136,7 @@ export const Navbar: React.FC = () => {
                 playChime('click');
                 setIsMobileMenuOpen(!isMobileMenuOpen);
               }}
-              className="lg:hidden p-2 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-zinc-700 dark:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-800 cursor-pointer shadow-xs"
+              className="lg:hidden p-1.5 sm:p-2 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-zinc-700 dark:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-800 cursor-pointer shadow-xs shrink-0"
               aria-label={isMobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
               aria-expanded={isMobileMenuOpen}
             >

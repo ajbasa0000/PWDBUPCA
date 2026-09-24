@@ -70,10 +70,10 @@ export default function HomePage() {
               <div className="lg:col-span-7 space-y-7">
                 
                 {/* Prestige Badge */}
-                <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white dark:bg-zinc-900 border border-zinc-200/80 dark:border-zinc-800 shadow-xs hover:border-amber-400 transition-colors">
-                  <span className="flex h-2 w-2 rounded-full bg-amber-500"></span>
-                  <Award className="w-4 h-4 text-amber-500" />
-                  <span className="text-xs font-bold text-zinc-700 dark:text-zinc-300">
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white dark:bg-zinc-900 border border-zinc-200/80 dark:border-zinc-800 shadow-xs hover:border-amber-400 transition-colors max-w-full">
+                  <span className="flex h-2 w-2 rounded-full bg-amber-500 shrink-0"></span>
+                  <Award className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-500 shrink-0" />
+                  <span className="text-[11px] sm:text-xs font-bold text-zinc-700 dark:text-zinc-300 truncate sm:whitespace-normal">
                     UP Gawad Tsanselor 2025: Natatanging Lingkod Komunidad
                   </span>
                 </div>
