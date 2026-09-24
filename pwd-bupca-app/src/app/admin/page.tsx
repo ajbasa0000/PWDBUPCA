@@ -273,7 +273,7 @@ export default function AdminCommandCenter() {
     },
     { 
       id: 'field', 
-      label: 'Field Worker Tablet', 
+      label: 'Community Volunteer Tablet', 
       badge: 'Offline PWA',
       icon: Tablet, 
       desc: 'Door-to-door Pook census & audio assist' 

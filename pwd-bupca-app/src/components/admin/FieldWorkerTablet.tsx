@@ -182,8 +182,8 @@ export const FieldWorkerTablet: React.FC<FieldWorkerTabletProps> = ({
       guardianContact: guardianContact.trim() || undefined,
       status: 'pending_review',
       submissionDate: new Date().toISOString().split('T')[0],
-      reviewedBy: `Encoded by Field Worker: ${encoderName} (${pookObj.name})`,
-      reviewNotes: fieldNotes.trim() ? `[Field Intake Note]: ${fieldNotes.trim()}` : `Field survey encoded at ${pookObj.name} by ${encoderName}.`,
+      reviewedBy: `Encoded by Community Volunteer: ${encoderName} (${pookObj.name})`,
+      reviewNotes: fieldNotes.trim() ? `[Volunteer Intake Note]: ${fieldNotes.trim()}` : `Field survey encoded at ${pookObj.name} by volunteer ${encoderName}.`,
       dpaConsent: true,
     };
 
@@ -245,7 +245,7 @@ export const FieldWorkerTablet: React.FC<FieldWorkerTabletProps> = ({
                 </span>
               </div>
               <h2 className="text-2xl font-black tracking-tight text-white mt-0.5">
-                Field Worker & Pook Encoder Console
+                Community Volunteer & Pook Encoder Console
               </h2>
               <p className="text-xs text-slate-300">
                 Door-to-door resident interview & assisted registration terminal for Barangay UP Campus.
@@ -308,7 +308,7 @@ export const FieldWorkerTablet: React.FC<FieldWorkerTabletProps> = ({
 
             <div>
               <label className="block text-[11px] font-bold uppercase text-zinc-500 mb-1">
-                Field Worker Name
+                Community Volunteer Name
               </label>
               <input
                 type="text"
@@ -398,7 +398,7 @@ export const FieldWorkerTablet: React.FC<FieldWorkerTabletProps> = ({
 
               <button
                 type="button"
-                onClick={() => speakText("Magandang araw po. Ako ay field worker ng PWD BUPCA. Narito ako upang magtala para sa asosasyon at livelihood programs sa ating barangay.")}
+                onClick={() => speakText("Magandang araw po. Ako ay community volunteer ng PWD BUPCA. Narito ako upang magtala para sa asosasyon at livelihood programs sa ating barangay.")}
                 className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300 font-bold text-xs hover:bg-blue-100 transition cursor-pointer"
                 title="Pakinggan ang pambungad na bati"
               >
@@ -642,7 +642,7 @@ export const FieldWorkerTablet: React.FC<FieldWorkerTabletProps> = ({
               {/* Field Notes */}
               <div>
                 <label className="block text-[11px] font-bold text-zinc-500 mb-1">
-                  Tala ng Field Worker (Observations, Machine access needs, Urgency)
+                  Tala ng Community Volunteer (Observations, Machine access needs, Urgency)
                 </label>
                 <textarea
                   rows={2}
