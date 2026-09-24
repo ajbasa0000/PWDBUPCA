@@ -59,9 +59,9 @@ export const Navbar: React.FC = () => {
               </span>
             </div>
             
-            <div className="flex flex-col justify-center min-w-0">
+            <div className="flex flex-col justify-center shrink-0">
               <div className="flex items-center gap-1.5 sm:gap-2">
-                <span className="font-black text-base sm:text-2xl tracking-tight text-zinc-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors truncate">
+                <span className="font-black text-sm xs:text-base sm:text-2xl tracking-tight text-zinc-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors whitespace-nowrap">
                   PWD BUPCA
                 </span>
                 <span className="hidden md:inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-amber-50 dark:bg-amber-950/70 text-amber-800 dark:text-amber-300 border border-amber-200/90 dark:border-amber-700/80">
@@ -69,7 +69,7 @@ export const Navbar: React.FC = () => {
                   <span>UP Gawad Tsanselor</span>
                 </span>
               </div>
-              <p className="text-[9.5px] sm:text-xs font-medium text-zinc-500 dark:text-zinc-400 truncate max-w-[130px] xs:max-w-[170px] sm:max-w-none mt-0.5">
+              <p className="text-[9.5px] sm:text-xs font-medium text-zinc-500 dark:text-zinc-400 whitespace-nowrap mt-0.5">
                 Brgy. UP Campus • <span className="text-blue-700 dark:text-blue-400 font-semibold">PWD BUPCA</span>
               </p>
             </div>
