@@ -12,7 +12,8 @@ import {
   mockUsers,
   mockDTRRecords,
   mockApplications,
-  mockTrainingCohorts
+  mockTrainingCohorts,
+  mockPartners
 } from '@/data/mockData';
 import { defaultWebsiteContent, WebsiteContent } from '@/data/websiteContent';
 import { 
@@ -26,7 +27,8 @@ import {
   UserProfile,
   SupplyItem,
   MembershipApplication,
-  TrainingCohort
+  TrainingCohort,
+  PartnerClient
 } from '@/types';
 import { AssetTracker } from '@/components/admin/AssetTracker';
 import { SuppliesOrdering } from '@/components/admin/SuppliesOrdering';
@@ -133,6 +135,18 @@ export default function AdminCommandCenter() {
       } catch (e) {}
     }
     return mockTrainingCohorts;
+  });
+  const [partners, setPartners] = useState<PartnerClient[]>(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const stored = localStorage.getItem('pwd_bupca_partners');
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        }
+      } catch (e) {}
+    }
+    return mockPartners;
   });
   const [supplyRequests, setSupplyRequests] = useState<SupplyRequest[]>([
     {
@@ -803,6 +817,8 @@ export default function AdminCommandCenter() {
                   setUsers={setUsers}
                   supplies={supplies}
                   setSupplies={setSupplies}
+                  partners={partners}
+                  setPartners={setPartners}
                 />
               ) : (
                 <div className="bg-white dark:bg-zinc-900 rounded-3xl p-8 border border-rose-200 dark:border-rose-900/60 text-center space-y-3">

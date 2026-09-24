@@ -9,7 +9,8 @@ import {
   SupplyItem,
   UserRole,
   DisabilityType,
-  AssetStatus
+  AssetStatus,
+  PartnerClient
 } from '@/types';
 import { 
   Database, 
@@ -28,7 +29,9 @@ import {
   Sparkles,
   Key,
   Eye,
-  EyeOff
+  EyeOff,
+  Handshake,
+  ExternalLink
 } from 'lucide-react';
 import { useAccessibility } from '@/context/AccessibilityContext';
 
@@ -43,9 +46,11 @@ interface DatabaseManagerProps {
   setUsers: React.Dispatch<React.SetStateAction<UserProfile[]>>;
   supplies: SupplyItem[];
   setSupplies: React.Dispatch<React.SetStateAction<SupplyItem[]>>;
+  partners: PartnerClient[];
+  setPartners: React.Dispatch<React.SetStateAction<PartnerClient[]>>;
 }
 
-type EntityCategory = 'assets' | 'members' | 'products' | 'locations' | 'supplies';
+type EntityCategory = 'assets' | 'members' | 'products' | 'locations' | 'supplies' | 'partners';
 
 export const DatabaseManager: React.FC<DatabaseManagerProps> = ({
   assets,
@@ -58,6 +63,8 @@ export const DatabaseManager: React.FC<DatabaseManagerProps> = ({
   setUsers,
   supplies,
   setSupplies,
+  partners,
+  setPartners,
 }) => {
   const { playChime, speakText } = useAccessibility();
   const [activeCategory, setActiveCategory] = useState<EntityCategory>('assets');
@@ -116,6 +123,17 @@ export const DatabaseManager: React.FC<DatabaseManagerProps> = ({
     isSubsidized: true,
   });
 
+  // Form State for Partner / Client
+  const [partnerForm, setPartnerForm] = useState({
+    name: '',
+    category: 'Academic & UP Units' as PartnerClient['category'],
+    logo: '/partners/UNIVERSITY OF THE PHILIPPINES.png',
+    description: '',
+    collaborationType: 'Training & Facilities' as PartnerClient['collaborationType'],
+    websiteUrl: '',
+    activeStatus: true,
+  });
+
   // Open Create Modal
   const handleOpenCreate = () => {
     playChime('click');
@@ -161,6 +179,16 @@ export const DatabaseManager: React.FC<DatabaseManagerProps> = ({
         minThreshold: 10,
         costPerUnit: 0,
         isSubsidized: true,
+      });
+    } else if (activeCategory === 'partners') {
+      setPartnerForm({
+        name: '',
+        category: 'Academic & UP Units',
+        logo: '/partners/UNIVERSITY OF THE PHILIPPINES.png',
+        description: '',
+        collaborationType: 'Training & Facilities',
+        websiteUrl: '',
+        activeStatus: true,
       });
     }
     setIsModalOpen(true);
@@ -225,6 +253,19 @@ export const DatabaseManager: React.FC<DatabaseManagerProps> = ({
           isSubsidized: s.isSubsidized,
         });
       }
+    } else if (activeCategory === 'partners') {
+      const part = partners.find((p) => p.id === id);
+      if (part) {
+        setPartnerForm({
+          name: part.name,
+          category: part.category,
+          logo: part.logo,
+          description: part.description || '',
+          collaborationType: part.collaborationType,
+          websiteUrl: part.websiteUrl || '',
+          activeStatus: part.activeStatus,
+        });
+      }
     }
     setIsModalOpen(true);
   };
@@ -248,6 +289,14 @@ export const DatabaseManager: React.FC<DatabaseManagerProps> = ({
       setProducts((prev) => prev.filter((p) => p.id !== id));
     } else if (activeCategory === 'supplies') {
       setSupplies((prev) => prev.filter((s) => s.id !== id));
+    } else if (activeCategory === 'partners') {
+      setPartners((prev) => {
+        const updated = prev.filter((p) => p.id !== id);
+        try {
+          localStorage.setItem('pwd_bupca_partners', JSON.stringify(updated));
+        } catch (e) {}
+        return updated;
+      });
     }
     speakText(`Deleted ${name}`);
   };
@@ -334,6 +383,28 @@ export const DatabaseManager: React.FC<DatabaseManagerProps> = ({
         };
         setSupplies((prev) => [newSupply, ...prev]);
       }
+    } else if (activeCategory === 'partners') {
+      if (editingId) {
+        setPartners((prev) => {
+          const updated = prev.map((p) => (p.id === editingId ? { ...p, ...partnerForm } : p));
+          try {
+            localStorage.setItem('pwd_bupca_partners', JSON.stringify(updated));
+          } catch (e) {}
+          return updated;
+        });
+      } else {
+        const newPartner: PartnerClient = {
+          id: `part-${Date.now()}`,
+          ...partnerForm,
+        };
+        setPartners((prev) => {
+          const updated = [newPartner, ...prev];
+          try {
+            localStorage.setItem('pwd_bupca_partners', JSON.stringify(updated));
+          } catch (e) {}
+          return updated;
+        });
+      }
     }
 
     setIsModalOpen(false);
@@ -353,7 +424,7 @@ export const DatabaseManager: React.FC<DatabaseManagerProps> = ({
             </h2>
           </div>
           <p className="text-xs text-slate-500 mt-0.5">
-            Full CRUD configuration for machinery, staff/members, store catalog, and supplies.
+            Full CRUD configuration for machinery, staff/members, store catalog, supplies, and partners & clients.
           </p>
         </div>
 
@@ -362,7 +433,7 @@ export const DatabaseManager: React.FC<DatabaseManagerProps> = ({
           className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs shadow-xs cursor-pointer transition self-start md:self-auto"
         >
           <Plus className="w-4 h-4" />
-          <span>Add New {activeCategory.slice(0, -1).toUpperCase()}</span>
+          <span>Add New {activeCategory === 'partners' ? 'Partner/Client' : activeCategory.slice(0, -1).toUpperCase()}</span>
         </button>
       </div>
 
@@ -374,6 +445,7 @@ export const DatabaseManager: React.FC<DatabaseManagerProps> = ({
             { id: 'members', label: `Members & Users (${users.length})`, icon: Users },
             { id: 'products', label: `Store Catalog (${products.length})`, icon: ShoppingBag },
             { id: 'supplies', label: `Supplies Stock (${supplies.length})`, icon: Package },
+            { id: 'partners', label: `Partners & Clients (${partners.length})`, icon: Handshake },
           ].map((cat) => {
             const Icon = cat.icon;
             const isActive = activeCategory === cat.id;
@@ -668,6 +740,106 @@ export const DatabaseManager: React.FC<DatabaseManagerProps> = ({
                             onClick={() => handleDelete(sup.id, sup.name)}
                             className="p-1.5 rounded-lg border border-rose-200 dark:border-rose-900/50 hover:bg-rose-50 dark:hover:bg-rose-950 text-rose-600 cursor-pointer"
                             title="Delete Supply"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+
+        {/* 5. PARTNERS & CLIENTS TABLE */}
+        {activeCategory === 'partners' && (
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs">
+              <thead className="border-b border-slate-100 dark:border-zinc-800 text-slate-400 font-medium">
+                <tr>
+                  <th className="py-2.5 px-3">Organization / Client</th>
+                  <th className="py-2.5 px-3">Category</th>
+                  <th className="py-2.5 px-3">Collaboration / Engagement</th>
+                  <th className="py-2.5 px-3">Status</th>
+                  <th className="py-2.5 px-3 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100 dark:divide-zinc-800">
+                {partners
+                  .filter((p) =>
+                    p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    p.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    p.collaborationType.toLowerCase().includes(searchQuery.toLowerCase())
+                  )
+                  .map((part) => (
+                    <tr key={part.id} className="hover:bg-slate-50/50 dark:hover:bg-zinc-800/30">
+                      <td className="py-2.5 px-3 font-semibold text-slate-900 dark:text-white flex items-center gap-3">
+                        <div className="w-9 h-9 rounded-lg bg-white p-1 border border-slate-200 dark:border-zinc-700 flex items-center justify-center shrink-0 shadow-xs">
+                          <img
+                            src={part.logo}
+                            alt={part.name}
+                            className="max-h-full max-w-full object-contain"
+                            onError={(e) => {
+                              // Fallback on broken image
+                              (e.target as HTMLElement).style.display = 'none';
+                            }}
+                          />
+                        </div>
+                        <div className="min-w-0">
+                          <div className="flex items-center gap-1.5">
+                            <span className="truncate max-w-[200px] sm:max-w-xs">{part.name}</span>
+                            {part.websiteUrl && (
+                              <a
+                                href={part.websiteUrl}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="text-slate-400 hover:text-blue-600 transition"
+                              >
+                                <ExternalLink className="w-3 h-3" />
+                              </a>
+                            )}
+                          </div>
+                          <span className="text-[10px] text-slate-400 font-normal line-clamp-1">
+                            {part.description}
+                          </span>
+                        </div>
+                      </td>
+                      <td className="py-2.5 px-3">
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-medium bg-slate-100 dark:bg-zinc-800 text-slate-700 dark:text-slate-300">
+                          {part.category}
+                        </span>
+                      </td>
+                      <td className="py-2.5 px-3">
+                        <span className="px-2 py-0.5 rounded-md text-[10px] font-semibold bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-blue-300">
+                          {part.collaborationType}
+                        </span>
+                      </td>
+                      <td className="py-2.5 px-3">
+                        <span
+                          className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold ${
+                            part.activeStatus
+                              ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300'
+                              : 'bg-zinc-100 text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400'
+                          }`}
+                        >
+                          <span className={`w-1.5 h-1.5 rounded-full ${part.activeStatus ? 'bg-emerald-500 animate-pulse' : 'bg-zinc-400'}`} />
+                          {part.activeStatus ? 'Active Partner' : 'Archived'}
+                        </span>
+                      </td>
+                      <td className="py-2.5 px-3 text-right">
+                        <div className="flex items-center justify-end gap-1.5">
+                          <button
+                            onClick={() => handleOpenEdit(part.id)}
+                            className="p-1.5 rounded-lg border border-slate-200 dark:border-zinc-700 hover:bg-slate-100 dark:hover:bg-zinc-800 text-slate-600 cursor-pointer"
+                            title="Edit Partner/Client"
+                          >
+                            <Edit3 className="w-3.5 h-3.5" />
+                          </button>
+                          <button
+                            onClick={() => handleDelete(part.id, part.name)}
+                            className="p-1.5 rounded-lg border border-rose-200 dark:border-rose-900/50 hover:bg-rose-50 dark:hover:bg-rose-950 text-rose-600 cursor-pointer"
+                            title="Delete Partner/Client"
                           >
                             <Trash2 className="w-3.5 h-3.5" />
                           </button>
@@ -1027,6 +1199,134 @@ export const DatabaseManager: React.FC<DatabaseManagerProps> = ({
                         className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-zinc-700 bg-white dark:bg-zinc-800"
                       />
                     </div>
+                  </div>
+                </>
+              )}
+
+              {/* PARTNER / CLIENT FORM */}
+              {activeCategory === 'partners' && (
+                <>
+                  <div>
+                    <label className="block font-medium mb-1">Organization / Partner Name *</label>
+                    <input
+                      type="text"
+                      required
+                      value={partnerForm.name}
+                      onChange={(e) => setPartnerForm({ ...partnerForm, name: e.target.value })}
+                      placeholder="e.g. Quezon City PDAO, BPI Foundation, UP ISSI"
+                      className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-zinc-700 bg-white dark:bg-zinc-800"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block font-medium mb-1">Sector / Category</label>
+                      <select
+                        value={partnerForm.category}
+                        onChange={(e) =>
+                          setPartnerForm({
+                            ...partnerForm,
+                            category: e.target.value as PartnerClient['category'],
+                          })
+                        }
+                        className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-zinc-700 bg-white dark:bg-zinc-800"
+                      >
+                        <option value="Academic & UP Units">Academic & UP Units</option>
+                        <option value="Government & City Units">Government & City Units</option>
+                        <option value="Corporate & Banking">Corporate & Banking</option>
+                        <option value="NGO & Civil Society">NGO & Civil Society</option>
+                        <option value="Community & Fraternal">Community & Fraternal</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block font-medium mb-1">Collaboration Type</label>
+                      <select
+                        value={partnerForm.collaborationType}
+                        onChange={(e) =>
+                          setPartnerForm({
+                            ...partnerForm,
+                            collaborationType: e.target.value as PartnerClient['collaborationType'],
+                          })
+                        }
+                        className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-zinc-700 bg-white dark:bg-zinc-800"
+                      >
+                        <option value="Institutional Partner">Institutional Partner</option>
+                        <option value="LGU & Government Sponsor">LGU & Government Sponsor</option>
+                        <option value="Corporate Client / Patron">Corporate Client / Patron</option>
+                        <option value="Training & Facilities">Training & Facilities</option>
+                        <option value="Advocacy & Community">Advocacy & Community</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block font-medium mb-1">Logo Path or Image URL *</label>
+                    <input
+                      type="text"
+                      required
+                      value={partnerForm.logo}
+                      onChange={(e) => setPartnerForm({ ...partnerForm, logo: e.target.value })}
+                      placeholder="/partners/UNIVERSITY OF THE PHILIPPINES.png"
+                      className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 font-mono text-[11px]"
+                    />
+                    <p className="text-[10px] text-slate-400 mt-1">
+                      Path in /public/partners or remote HTTPS image URL.
+                    </p>
+                  </div>
+
+                  {/* Logo Preview */}
+                  {partnerForm.logo && (
+                    <div className="flex items-center gap-3 p-2 rounded-lg bg-slate-50 dark:bg-zinc-800/50 border border-slate-200 dark:border-zinc-700">
+                      <div className="w-12 h-12 bg-white rounded-md p-1 border border-slate-200 dark:border-zinc-700 flex items-center justify-center shrink-0">
+                        <img
+                          src={partnerForm.logo}
+                          alt="Preview"
+                          className="max-h-full max-w-full object-contain"
+                          onError={(e) => {
+                            (e.target as HTMLElement).style.display = 'none';
+                          }}
+                        />
+                      </div>
+                      <span className="text-[11px] text-slate-500 truncate">
+                        Preview: {partnerForm.name || 'Untitled Organization'}
+                      </span>
+                    </div>
+                  )}
+
+                  <div>
+                    <label className="block font-medium mb-1">Website URL (Optional)</label>
+                    <input
+                      type="url"
+                      value={partnerForm.websiteUrl}
+                      onChange={(e) => setPartnerForm({ ...partnerForm, websiteUrl: e.target.value })}
+                      placeholder="https://..."
+                      className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-zinc-700 bg-white dark:bg-zinc-800"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block font-medium mb-1">Engagement Description</label>
+                    <textarea
+                      rows={2}
+                      value={partnerForm.description}
+                      onChange={(e) => setPartnerForm({ ...partnerForm, description: e.target.value })}
+                      placeholder="Summary of partnership, sponsorships, or orders placed..."
+                      className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-zinc-700 bg-white dark:bg-zinc-800"
+                    />
+                  </div>
+
+                  <div className="flex items-center gap-2 pt-1">
+                    <input
+                      type="checkbox"
+                      id="partnerActiveStatus"
+                      checked={partnerForm.activeStatus}
+                      onChange={(e) => setPartnerForm({ ...partnerForm, activeStatus: e.target.checked })}
+                      className="rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                    />
+                    <label htmlFor="partnerActiveStatus" className="text-slate-700 dark:text-slate-300 font-medium">
+                      Active Partner / Client (Shown on website)
+                    </label>
                   </div>
                 </>
               )}

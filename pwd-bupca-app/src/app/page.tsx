@@ -18,15 +18,29 @@ import {
   Compass, 
   ArrowUpRight,
   Calendar,
-  MapPin
+  MapPin,
+  Handshake,
+  Building2,
+  ExternalLink
 } from 'lucide-react';
 import { Navbar } from '@/components/Navbar';
-import { mockProducts } from '@/data/mockData';
+import { mockProducts, mockPartners } from '@/data/mockData';
+import { PartnerClient } from '@/types';
 import { defaultWebsiteContent } from '@/data/websiteContent';
 import { useAccessibility } from '@/context/AccessibilityContext';
 
 export default function HomePage() {
   const { playChime } = useAccessibility();
+  const [partnersList, setPartnersList] = React.useState<PartnerClient[]>(mockPartners);
+
+  React.useEffect(() => {
+    try {
+      const stored = localStorage.getItem('pwd_bupca_partners');
+      if (stored) {
+        setPartnersList(JSON.parse(stored));
+      }
+    } catch (e) {}
+  }, []);
 
   const impactStats = [
     { label: "100% PWD Artisan Made", desc: "Every single piece sewn and crafted by members with determination", value: "100%" },
@@ -443,6 +457,97 @@ export default function HomePage() {
                   </div>
                 </div>
               ))}
+            </div>
+          </div>
+        </section>
+
+        {/* INSTITUTIONAL PARTNERS & CLIENTS SHOWCASE */}
+        <section className="py-20 bg-slate-50 dark:bg-zinc-900/60 border-y border-zinc-200/80 dark:border-zinc-800 relative">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+              <div className="space-y-2">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-950/80 text-blue-700 dark:text-blue-300 text-xs font-bold">
+                  <Handshake className="w-3.5 h-3.5" />
+                  <span>Institutional Ecosystem</span>
+                </div>
+                <h2 className="text-3xl sm:text-4xl font-extrabold text-zinc-900 dark:text-white tracking-tight">
+                  Trusted by Universities, LGUs & Corporates
+                </h2>
+                <p className="text-sm text-zinc-600 dark:text-zinc-400 max-w-2xl font-normal">
+                  Over 30 academic departments, city offices, financial institutions, and community foundations partner with PWD BUPCA for sustainable procurement, upcycling programs, and skills training.
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-bold text-slate-500">
+                  {partnersList.filter(p => p.activeStatus).length} Active Institutional Alliances
+                </span>
+              </div>
+            </div>
+
+            {/* Category Groups */}
+            <div className="space-y-10">
+              {[
+                { category: 'Academic & UP Units', label: 'University of the Philippines Diliman & Academic Colleges' },
+                { category: 'Government & City Units', label: 'Quezon City Government & Public Sector Offices' },
+                { category: 'Corporate & Banking', label: 'Corporate Clients & Enterprise Patrons' },
+                { category: 'NGO & Civil Society', label: 'Civic Foundations, Fraternal & Community Partners' },
+              ].map((grp) => {
+                const groupPartners = partnersList.filter(
+                  (p) => p.activeStatus && (p.category === grp.category || (grp.category === 'NGO & Civil Society' && p.category === 'Community & Fraternal'))
+                );
+                if (groupPartners.length === 0) return null;
+
+                return (
+                  <div key={grp.category} className="space-y-4">
+                    <h3 className="text-xs font-black uppercase tracking-wider text-slate-400 dark:text-zinc-500 flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-blue-600"></span>
+                      <span>{grp.label}</span>
+                    </h3>
+
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4">
+                      {groupPartners.map((part) => (
+                        <div
+                          key={part.id}
+                          className="group relative bg-white dark:bg-zinc-900 rounded-2xl p-4 border border-zinc-200/80 dark:border-zinc-800 hover:border-blue-400 dark:hover:border-blue-500/50 shadow-xs hover:shadow-md transition-all flex flex-col items-center justify-between text-center min-h-[140px]"
+                        >
+                          <div className="w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center p-2 rounded-xl bg-slate-50/50 dark:bg-zinc-800/40 group-hover:scale-105 transition-transform">
+                            <img
+                              src={part.logo}
+                              alt={part.name}
+                              className="max-h-full max-w-full object-contain filter contrast-105"
+                              onError={(e) => {
+                                (e.target as HTMLElement).style.display = 'none';
+                              }}
+                            />
+                          </div>
+
+                          <div className="mt-2 w-full">
+                            <span className="text-[11px] font-bold text-zinc-900 dark:text-zinc-100 line-clamp-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                              {part.name}
+                            </span>
+                            <span className="text-[9px] text-zinc-400 font-medium block truncate mt-0.5">
+                              {part.collaborationType}
+                            </span>
+                          </div>
+
+                          {part.websiteUrl && (
+                            <a
+                              href={part.websiteUrl}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity p-1 text-slate-400 hover:text-blue-600"
+                              title={`Visit ${part.name}`}
+                            >
+                              <ExternalLink className="w-3 h-3" />
+                            </a>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </section>

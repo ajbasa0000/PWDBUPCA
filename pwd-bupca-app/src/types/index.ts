@@ -189,6 +189,17 @@ export interface LivelihoodProgram {
   activeStatus?: boolean;
 }
 
+export interface PartnerClient {
+  id: string;
+  name: string;
+  category: 'Academic & UP Units' | 'Government & City Units' | 'Corporate & Banking' | 'NGO & Civil Society' | 'Community & Fraternal';
+  logo: string;
+  description?: string;
+  collaborationType: 'Training & Facilities' | 'Orders & Client' | 'Advocacy & Grants' | 'Community Partner' | 'Institutional Partner' | 'LGU & Government Sponsor' | 'Corporate Client / Patron' | 'Advocacy & Community';
+  websiteUrl?: string;
+  activeStatus: boolean;
+}
+
 export interface NewsItem {
   id: string;
   title: string;
