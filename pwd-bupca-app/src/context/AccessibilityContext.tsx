@@ -31,13 +31,13 @@ export const AccessibilityProvider: React.FC<{ children: React.ReactNode }> = ({
   const [isDyslexicFont, setIsDyslexicFont] = useState<boolean>(false);
   const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
 
-  // Initialize theme from system or local storage
+  // Initialize theme from local storage (default to 'light' first)
   useEffect(() => {
     const savedTheme = localStorage.getItem('pwd_bupca_theme') as ThemeMode | null;
     if (savedTheme) {
       setTheme(savedTheme);
-    } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      setTheme('dark');
+    } else {
+      setTheme('light');
     }
   }, []);
 

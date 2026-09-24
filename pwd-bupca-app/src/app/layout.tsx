@@ -40,7 +40,7 @@ export default function RootLayout({
             __html: `
               try {
                 const saved = localStorage.getItem('pwd_bupca_theme');
-                if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                if (saved === 'dark') {
                   document.documentElement.classList.add('dark');
                 } else {
                   document.documentElement.classList.remove('dark');
