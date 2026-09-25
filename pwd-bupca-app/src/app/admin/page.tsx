@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { fetchProfilesFromSupabase } from '@/lib/userService';
 import { 
   mockLocations, 
   mockAssets, 
@@ -148,6 +149,20 @@ export default function AdminCommandCenter() {
     }
     return mockPartners;
   });
+
+  // Sync users from Supabase on mount
+  useEffect(() => {
+    async function loadUsers() {
+      const liveUsers = await fetchProfilesFromSupabase();
+      if (liveUsers && liveUsers.length > 0) {
+        setUsers(liveUsers);
+        try {
+          localStorage.setItem('pwd_bupca_users', JSON.stringify(liveUsers));
+        } catch (e) {}
+      }
+    }
+    loadUsers();
+  }, []);
   const [supplyRequests, setSupplyRequests] = useState<SupplyRequest[]>([
     {
       id: 'req-1',

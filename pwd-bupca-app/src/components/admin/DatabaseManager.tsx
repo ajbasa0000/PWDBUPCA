@@ -37,6 +37,7 @@ import {
   Calendar
 } from 'lucide-react';
 import { useAccessibility } from '@/context/AccessibilityContext';
+import { upsertProfileInSupabase, deleteProfileFromSupabase } from '@/lib/userService';
 
 interface DatabaseManagerProps {
   assets: EquipmentAsset[];
@@ -350,6 +351,7 @@ export const DatabaseManager: React.FC<DatabaseManagerProps> = ({
     if (activeCategory === 'assets') {
       setAssets((prev) => prev.filter((a) => a.id !== id));
     } else if (activeCategory === 'members') {
+      deleteProfileFromSupabase(id);
       setUsers((prev) => {
         const updated = prev.filter((u) => u.id !== id);
         try {
@@ -410,8 +412,14 @@ export const DatabaseManager: React.FC<DatabaseManagerProps> = ({
       }
     } else if (activeCategory === 'members') {
       if (editingId) {
+        const targetUser = users.find((u) => u.id === editingId);
+        const updatedUser: UserProfile = {
+          ...(targetUser || { id: editingId, fullName: '', role: 'member_operator', disability: 'None', phone: '' }),
+          ...userForm,
+        };
+        upsertProfileInSupabase(updatedUser);
         setUsers((prev) => {
-          const updated = prev.map((u) => (u.id === editingId ? { ...u, ...userForm } : u));
+          const updated = prev.map((u) => (u.id === editingId ? updatedUser : u));
           try {
             localStorage.setItem('pwd_bupca_users', JSON.stringify(updated));
           } catch (e) {}
@@ -419,9 +427,10 @@ export const DatabaseManager: React.FC<DatabaseManagerProps> = ({
         });
       } else {
         const newUser: UserProfile = {
-          id: `usr-${Date.now()}`,
+          id: typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : `usr-${Date.now()}`,
           ...userForm,
         };
+        upsertProfileInSupabase(newUser);
         setUsers((prev) => {
           const updated = [newUser, ...prev];
           try {
